@@ -7,7 +7,9 @@
     $h_ = 320;
     $i_ = 250;
 @endphp
+
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <style>
     .graphic-container {
         min-height: 320px;
@@ -273,16 +275,26 @@
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-body">
+                <h4>Unit Entry & Revenue</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="chartunitentry"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="chartrevenue"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
+
 
         <script>
-// $(document).ready(function(){
-
     $.getJSON('/main/getcostunit',function(items){
-        console.log(items)
-        items.sort((a, b) => a.costunit - b.costunit);
-        const pivotGrid = $('#costunit').dxPivotGrid({
+        // console.log(items)
+        $('#costunit').dxPivotGrid({
             allowSortingBySummary: true,
             allowSorting: true,
             allowFiltering: true,
@@ -325,7 +337,119 @@
             },
         });
     })
-// })
+
+
+$.getJSON('/main/getunitentrychart',function(items){
+
+    $('#chartunitentry').dxChart({
+        dataSource : items,
+        palette: 'soft',
+        commonSeriesSettings: {
+            argumentField: 'nama_bulan',
+            type: 'bar',
+            hoverMode: 'allArgumentPoints',
+            selectionMode: 'allArgumentPoints',
+            label: {
+                visible: true,
+                format: {
+                    type: 'fixedPoint',
+                    precision: 0,
+                },
+            },
+        },
+        tooltip: {
+        enabled: true,
+        location: 'edge',
+        customizeTooltip(arg) {
+            return {
+                text: `${arg.seriesName} : ${arg.valueText}`,
+                };
+            },
+        },
+        series: [
+            { valueField: 'kpb_1', name: 'kpb_1'},
+            { valueField: 'kpb_2', name: 'kpb_2'},
+            { valueField: 'kpb_3', name: 'kpb_3'},
+            { valueField: 'kpb_4', name: 'kpb_4'},
+            { valueField: 'psl', name: 'psl'},
+            { valueField: 'psr', name: 'psr'},
+            { valueField: 'go', name: 'go'},
+            { valueField: 'lr', name: 'lr'},
+        ],
+        title: 'Unit Entrys',
+        legend: {
+            verticalAlignment: 'bottom',
+            horizontalAlignment: 'center',
+        },
+        export: {
+            enabled: true,
+        },
+        onPointClick(e) {
+            e.target.select();
+        },
+        onLegendClick(e) {
+            const series = e.target;
+            if (series.isVisible()) {
+                series.hide();
+            } else {
+                series.show();
+            }
+        },
+    });
+});
+
+$.getJSON('/main/getrevenuechart',function(items){
+
+    $('#chartrevenue').dxChart({
+        dataSource : items,
+        commonSeriesSettings: {
+        argumentField: 'nama_bulan',
+        type: 'bar',
+        hoverMode: 'allArgumentPoints',
+        selectionMode: 'allArgumentPoints',
+        label: {
+            visible: true,
+            format: {
+            type: 'fixedPoint',
+            precision: 0,
+            },
+        },
+        },
+        tooltip: {
+        enabled: true,
+        location: 'edge',
+        customizeTooltip(arg) {
+            return {
+            text: `${arg.seriesName} : ${arg.valueText}`,
+            };
+        },
+        },
+        series: [
+        { valueField: 'jasa', name: 'jasa' },
+        { valueField: 'part', name: 'part' },
+        { valueField: 'oli', name: 'oli' },
+        ],
+        title: 'Unit Revenue',
+        legend: {
+            verticalAlignment: 'bottom',
+            horizontalAlignment: 'center',
+        },
+        export: {
+            enabled: true,
+        },
+        onPointClick(e) {
+            e.target.select();
+        },
+        onLegendClick(e) {
+            const series = e.target;
+            if (series.isVisible()) {
+                series.hide();
+            } else {
+                series.show();
+            }
+        },
+    });
+});
 
         </script>
 

@@ -395,65 +395,196 @@ class LpjController extends Controller
         $interval2 = 5;
 
         $result = DB::select("
-        SELECT 
+            SELECT 
+            dealers.nama_dealer,
+            kategori_proposals.nama_kategori,
+            case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo1 else MONTH(lpjs.periode_start_lpj) end AS bulan,
+            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
+            COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
+            COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
+            COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
+        FROM
+            kategori_proposals
+        LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
+        LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
+        LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
+                    AND lpjs.status_lpj = 2
+                    AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+                    AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+                    AND YEAR(lpjs.periode_start_lpj) = $currentYear
+                    AND YEAR(lpjs.periode_end_lpj) = $currentYear
+        WHERE 
+            kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
+            dealers.nama_dealer is not null
+            
+        GROUP BY
         dealers.nama_dealer,
-        kategori_proposals.nama_kategori,
-        case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo1 else MONTH(lpjs.periode_start_lpj) end AS bulan,
-        case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
-        COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
-        COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
-        COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
-    FROM
-        kategori_proposals
-    LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
-    LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
-    LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
-                   AND lpjs.status_lpj = 2
-                   AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
-                   AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
-                   AND YEAR(lpjs.periode_start_lpj) = $currentYear
-                   AND YEAR(lpjs.periode_end_lpj) = $currentYear
-    WHERE 
-        kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
-		dealers.nama_dealer is not null
-        
-    GROUP BY
-    dealers.nama_dealer,
-        kategori_proposals.nama_kategori
- 
-
+            kategori_proposals.nama_kategori
     
-    UNION
+
+        
+        UNION
 
 
-    SELECT 
+        SELECT 
+            dealers.nama_dealer,
+            kategori_proposals.nama_kategori,
+            case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo2 else MONTH(lpjs.periode_start_lpj) end AS bulan,
+            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
+            COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
+            COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
+            COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
+        FROM
+            kategori_proposals
+        LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
+        LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
+        LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
+                    AND lpjs.status_lpj = 2
+                    AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
+                    AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
+                    AND YEAR(lpjs.periode_start_lpj) = $currentYear
+                    AND YEAR(lpjs.periode_end_lpj) = $currentYear
+        WHERE 
+            kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
+            dealers.nama_dealer is not null
+        GROUP BY
         dealers.nama_dealer,
-        kategori_proposals.nama_kategori,
-        case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo2 else MONTH(lpjs.periode_start_lpj) end AS bulan,
-        case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
-        COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
-        COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
-        COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
-    FROM
-        kategori_proposals
-    LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
-    LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
-    LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
-                   AND lpjs.status_lpj = 2
-                   AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
-                   AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
-                   AND YEAR(lpjs.periode_start_lpj) = $currentYear
-                   AND YEAR(lpjs.periode_end_lpj) = $currentYear
-    WHERE 
-        kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
-		dealers.nama_dealer is not null
-    GROUP BY
-    dealers.nama_dealer,
-        kategori_proposals.nama_kategori
-      
-        ");
+            kategori_proposals.nama_kategori
+        
+            ");
         return $result;
         // return response()->json(["status" => "success", "message" => "Data Ditampilkan", "data" => $result])->setEncodingOptions(JSON_NUMERIC_CHECK);
+    }
+
+    public function getrevenuechart() {
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+        $monthsAgo1 = $currentMonth - 1;
+        $interval1 = 1;
+        $monthsAgo2 = $currentMonth - 2;
+        $interval2 = 2;
+
+        $result = DB::select("
+        SELECT
+        CASE 
+                WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') 
+                ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
+        END AS nama_bulan,
+        COALESCE(sum(lpj_revenues.jasa_act),0) as jasa,
+        COALESCE(sum(lpj_revenues.part_act),0) as part,
+        COALESCE(sum(lpj_revenues.oli_act),0) as oli
+        FROM
+        lpjs
+        LEFT JOIN lpj_revenues ON lpjs.id_proposal = lpj_revenues.proposal_id
+        where lpjs.status_lpj = 2
+         AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+         AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+         AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
+         AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
+         
+         UNION
+         
+         SELECT
+        CASE 
+                WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') 
+                ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
+        END AS nama_bulan,
+        COALESCE(sum(lpj_revenues.jasa_act),0) as jasa,
+        COALESCE(sum(lpj_revenues.part_act),0) as part,
+        COALESCE(sum(lpj_revenues.oli_act),0) as oli
+        FROM
+        lpjs
+        LEFT JOIN lpj_revenues ON lpjs.id_proposal = lpj_revenues.proposal_id
+        where lpjs.status_lpj = 2
+         AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
+         AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
+         AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
+         AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
+        
+            ");
+        return response()->json($result)->setEncodingOptions(JSON_NUMERIC_CHECK);
+
+    }
+
+    public function getunitentrychart() {
+        $currentMonth = date('n');
+        $currentYear = date('Y');
+        $monthsAgo1 = $currentMonth - 1;
+        $interval1 = 1;
+        $monthsAgo2 = $currentMonth - 2;
+        $interval2 = 2;
+
+        $result = DB::select("
+        SELECT
+    nama_bulan,
+    sum(CASE WHEN unit_nama = 'kpb_1' THEN jumlah END) AS kpb_1,
+    sum(CASE WHEN unit_nama = 'kpb_2' THEN jumlah END) AS kpb_2,
+    sum(CASE WHEN unit_nama = 'kpb_3' THEN jumlah END) AS kpb_3,
+    sum(CASE WHEN unit_nama = 'kpb_4' THEN jumlah END) AS kpb_4,
+    sum(CASE WHEN unit_nama = 'psl' THEN jumlah END) AS psl,
+    sum(CASE WHEN unit_nama = 'psr' THEN jumlah END) AS psr,
+    sum(CASE WHEN unit_nama = 'go' THEN jumlah END) AS `go`,
+    sum(CASE WHEN unit_nama = 'lr' THEN jumlah END) AS lr
+FROM (
+    SELECT
+        CASE 
+            WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') 
+            ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
+        END AS nama_bulan,
+        unit_nama,
+        COALESCE(SUM(unit_jumlah),0) AS jumlah
+    FROM
+        lpjs
+        LEFT JOIN lpj_unitentrys ON lpjs.id_proposal = lpj_unitentrys.proposal_id
+    WHERE
+        lpjs.status_lpj = 2
+        AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+        AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+        AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
+        AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
+    GROUP BY
+        nama_bulan, unit_nama
+				
+) AS transposed_data
+
+UNION
+
+SELECT
+    nama_bulan,
+    sum(CASE WHEN unit_nama = 'kpb_1' THEN jumlah END) AS kpb_1,
+    sum(CASE WHEN unit_nama = 'kpb_2' THEN jumlah END) AS kpb_2,
+    sum(CASE WHEN unit_nama = 'kpb_3' THEN jumlah END) AS kpb_3,
+    sum(CASE WHEN unit_nama = 'kpb_4' THEN jumlah END) AS kpb_4,
+    sum(CASE WHEN unit_nama = 'psl' THEN jumlah END) AS psl,
+    sum(CASE WHEN unit_nama = 'psr' THEN jumlah END) AS psr,
+    sum(CASE WHEN unit_nama = 'go' THEN jumlah END) AS `go`,
+    sum(CASE WHEN unit_nama = 'lr' THEN jumlah END) AS lr
+FROM (
+    SELECT
+        CASE 
+            WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') 
+            ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
+        END AS nama_bulan,
+        unit_nama,
+        COALESCE(SUM(unit_jumlah),0) AS jumlah
+    FROM
+        lpjs
+        LEFT JOIN lpj_unitentrys ON lpjs.id_proposal = lpj_unitentrys.proposal_id
+    WHERE
+        lpjs.status_lpj = 2
+        AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
+        AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
+        AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
+        AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
+    GROUP BY
+        nama_bulan, unit_nama
+				
+) AS transposed_data;
+
+        
+            ");
+        // return $result;
+        return response()->json($result)->setEncodingOptions(JSON_NUMERIC_CHECK);
     }
 
 }

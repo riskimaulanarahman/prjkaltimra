@@ -390,9 +390,9 @@ class LpjController extends Controller
         $currentMonth = date('n');
         $currentYear = date('Y');
         $monthsAgo1 = $currentMonth - 1;
-        $interval1 = 4;
+        $interval1 = 1;
         $monthsAgo2 = $currentMonth - 2;
-        $interval2 = 5;
+        $interval2 = 2;
 
         $result = DB::select("
             SELECT 

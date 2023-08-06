@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\Dealer;
 use App\Models\Display;
 use App\Models\KategoriProposal;
@@ -501,9 +503,30 @@ class KonfigurasiController  extends Controller
                                         ->orWhere('hso_id_sales_people', 'like', '%'.request()->cari.'%')
                             ;
                         })
+                        // ->where('isActive',1)
                         ->orderBy('created_at', 'desc')
                         ->paginate(10);
 
         return view('backend.konfigurasi.sales-people', compact('datas', 'datadealer'));
     }
+
+    public function updsalesactive(Request $request) {
+        try {
+            $id = $request->input('id');
+            
+            $data = SalesPeople::find($id);
+
+            $data->update([
+                'isActive' => $request->input('isActive')
+            ]);
+            
+            return response()->json(["status" => "success", "message" => "Data Berhasil Disimpan"])->setEncodingOptions(JSON_NUMERIC_CHECK);
+    
+        } catch (\Throwable $th) {
+            // Catch any exceptions or errors and return an error response
+            return response()->json(["status" => "error", "message" => $th->getMessage()]);
+        }
+    }
+
+
 }

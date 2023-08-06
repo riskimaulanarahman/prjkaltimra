@@ -98,6 +98,9 @@
                         <div class="col p-0">Proposal</div>
                         <div class="col p-0">Lokasi</div>
                         <div class="col p-0">Penanggung Jawab</div>
+                        <div class="col p-0">Lokasi</div>
+                        <div class="col p-0">Start LJP</div>
+                        <div class="col p-0">End LJP</div>
                         <div class="col p-0">Submit Date</div>
                     </div>
                 </div>
@@ -173,6 +176,21 @@
                                 <div class="col p-0 pl-3">
                                     <div class="font-weight-bold" style="color: #222222">
                                         {{ $data->pj->nama_sales_people ?? '' }}
+                                    </div>
+                                </div>
+                                <div class="col p-0 pl-3">
+                                    <div class="font-weight-bold" style="color: #222222">
+                                        {{ $data->lpj_->tempat_lpj ?? '' }}
+                                    </div>
+                                </div>
+                                <div class="col p-0 pl-3">
+                                    <div class="font-weight-bold" style="color: #222222">
+                                        {{ $data->lpj_->periode_start_lpj ?? '' }}
+                                    </div>
+                                </div>
+                                <div class="col p-0 pl-3">
+                                    <div class="font-weight-bold" style="color: #222222">
+                                        {{ $data->lpj_->periode_end_lpj ?? '' }}
                                     </div>
                                 </div>
                                 <div class="col p-0 pr-4">

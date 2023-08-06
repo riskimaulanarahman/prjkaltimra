@@ -11,4 +11,5 @@ Route::get('dashboard', [DashboardController::class, 'index'])
         $trail->push(__('Home'), route('admin.dashboard'));
     });
 Route::get('pameran', [DashboardController::class, 'pameran'])->name('admin.pameran');
+Route::post('/updsalesactive','App\Http\Controllers\Backend\KonfigurasiController@updsalesactive');
 

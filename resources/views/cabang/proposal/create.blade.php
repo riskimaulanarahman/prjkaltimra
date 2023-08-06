@@ -9,6 +9,7 @@
 href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 rel="stylesheet"
 />
+
     @if ($data->status_proposal == 1 || $data->status_proposal == 5)
     <style>
         .form-control:disabled, .form-control[readonly] {
@@ -58,7 +59,7 @@ rel="stylesheet"
                         <div class="row">
                             <div class="col-12">
                                 <div class="float-left">
-                                    <h5>Form Pengajuan Pameran</h5>
+                                    <h5>Form Pengajuan Pameran </h5>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +248,7 @@ rel="stylesheet"
                                         </div>
                                         <hr>
                                         <div class="row">
-                                            <div class="col-md-6 pb-4">
+                                            {{-- <div class="col-md-6 pb-4">
                                                 <div class="row">
                                                     <label class="col-sm-12 col-form-label text-center pb-3 font-weight-bold">Unit Entry</label>
                                                     <div class="col-sm-12">
@@ -315,8 +316,9 @@ rel="stylesheet"
 
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
+                                            </div> --}}
+                                            
+                                            {{-- <div class="col-md-6">
                                                 <div class="row">
                                                     <label class="col-sm-12 col-form-label text-center pb-3 font-weight-bold">Revenue</label>
                                                     <div class="col-sm-12">
@@ -394,7 +396,135 @@ rel="stylesheet"
 
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
+                                            <input type="hidden" id="idkategori" value="{{$data->kategori->id}}">
+                                            @if($data->kategori->id == 5 )
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h4>Unit Entry :</h4>
+                                                            <hr>
+                                                            <div id="unitentryForm">
+                                                            
+                                                                <table class="table table-bordered">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Nama</th>
+                                                                            <th>Jumlah</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>KPB 1</td>
+                                                                            <td><input class="form-control" type="number" name="kpb1" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>KPB 2</td>
+                                                                            <td><input class="form-control" type="number" name="kpb2" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>KPB 3</td>
+                                                                            <td><input class="form-control" type="number" name="kpb3" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>KPB 4</td>
+                                                                            <td><input class="form-control" type="number" name="kpb4" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>PSL</td>
+                                                                            <td><input class="form-control" type="number" name="psl" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>PSR</td>
+                                                                            <td><input class="form-control" type="number" name="psr" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>GO+</td>
+                                                                            <td><input class="form-control" type="number" name="go" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>LR</td>
+                                                                            <td><input class="form-control" type="number" name="lr" value="0"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Total</b></td>
+                                                                            <td><input class="form-control" type="number" name="unittotal" value="0" readonly></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <div>
+                                                                    <button class="btn btn-xs btn-success" type="button" id="simpanunitentry" style="margin-top:10px">Simpan</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h4>Revenue :</h4>
+                                                            <hr>
+                                                            <div id="revenueForm">
+                                                                <div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label for="jasa">Jasa:</label>
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp.</span>
+                                                                                </div>
+                                                                                <input class="form-control" type="number" min="0" id="jasa" name="jasa" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="margin-top: 5px;">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label for="part">Part:</label>
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp.</span>
+                                                                                </div>
+                                                                                <input class="form-control" type="number" min="0" id="part" name="part" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="margin-top: 5px;">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label for="oli">Oli:</label>
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp.</span>
+                                                                                </div>
+                                                                                <input class="form-control" type="number" min="0" id="oli" name="oli" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="margin-top: 5px;">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label for="total">Total:</label>
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp.</span>
+                                                                                </div>
+                                                                                <input class="form-control" type="number" min="0" id="total" name="total" readonly />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <button class="btn btn-xs btn-success" type="button" id="simpanrevenue" style="margin-top:10px">Simpan</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
 
                                         <hr>
@@ -834,7 +964,192 @@ rel="stylesheet"
             </div><!--col-md-10-->
         </div><!--row-->
     </div><!--container-->
+    <input type="hidden" name="id" value="{{ request()->id }}">
 
+<script>
+    var kategori = $('#idkategori').val();
+    if(kategori == 5) {
+        $(document).ready(function() {
+        
+            var id = $('input[name="id"]').val();
+        
+            $.ajax({
+                url: '/cabang/getunitentrylpj',
+                type: 'POST',
+                data: {id: id,model:'proposal',_token: $('input[name="_token"]').val()},
+                success: function(response) {
+                    if(response.status == "success") {
+                        var items = response.data
+
+                        var kpb1 = $('input[name="kpb1"]').val(items[0].unit_jumlah);
+                        var kpb2 = $('input[name="kpb2"]').val(items[1].unit_jumlah);
+                        var kpb3 = $('input[name="kpb3"]').val(items[2].unit_jumlah);
+                        var kpb4 = $('input[name="kpb4"]').val(items[3].unit_jumlah);
+                        var psl = $('input[name="psl"]').val(items[4].unit_jumlah);
+                        var psr = $('input[name="psr"]').val(items[5].unit_jumlah);
+                        var go = $('input[name="go"]').val(items[6].unit_jumlah);
+                        var lr = $('input[name="lr"]').val(items[7].unit_jumlah);
+        
+                        var unittotal = items[0].unit_jumlah + items[1].unit_jumlah + items[2].unit_jumlah + items[3].unit_jumlah + items[4].unit_jumlah + items[5].unit_jumlah + items[6].unit_jumlah + items[7].unit_jumlah;
+        
+                        $('input[name="unittotal"]').val(unittotal);
+
+                        console.log(items)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if(response.status == "error") {
+                        alert(response.message)
+                    }
+                }
+            });
+        
+            $('input[name="kpb1"], input[name="kpb2"], input[name="kpb3"], input[name="kpb4"], input[name="psl"], input[name="psr"], input[name="go"], input[name="lr"]').on('input', function() {
+                var kpb1 = parseInt($('input[name="kpb1"]').val()) || 0;
+                var kpb2 = parseInt($('input[name="kpb2"]').val()) || 0;
+                var kpb3 = parseInt($('input[name="kpb3"]').val()) || 0;
+                var kpb4 = parseInt($('input[name="kpb4"]').val()) || 0;
+                var psl = parseInt($('input[name="psl"]').val()) || 0;
+                var psr = parseInt($('input[name="psr"]').val()) || 0;
+                var go = parseInt($('input[name="go"]').val()) || 0;
+                var lr = parseInt($('input[name="lr"]').val()) || 0;
+
+                var unittotal = kpb1 + kpb2 + kpb3 + kpb4 + psl + psr + go + lr;
+        
+                $('input[name="unittotal"]').val(unittotal);
+            })
+        
+            $('#simpanunitentry').on('click',function(event) {
+        
+                var id = $('input[name="id"]').val();
+
+                var kpb1 = $('input[name="kpb1"]').val() || 0;
+                var kpb2 = $('input[name="kpb2"]').val() || 0;
+                var kpb3 = $('input[name="kpb3"]').val() || 0;
+                var kpb4 = $('input[name="kpb4"]').val() || 0;
+                var psl = $('input[name="psl"]').val() || 0;
+                var psr = $('input[name="psr"]').val() || 0;
+                var go = $('input[name="go"]').val() || 0;
+                var lr = $('input[name="lr"]').val() || 0;
+        
+                var formData = {
+                    id: id,
+                    model: 'proposal',
+                    kpb1: parseInt(kpb1),
+                    kpb2: parseInt(kpb2),
+                    kpb3: parseInt(kpb3),
+                    kpb4: parseInt(kpb4),
+                    psl: parseInt(psl),
+                    psr: parseInt(psr),
+                    go: parseInt(go),
+                    lr: parseInt(lr),
+                    _token: $('input[name="_token"]').val()
+                };
+        
+                console.log(formData)
+        
+                $.ajax({
+                    url: '/cabang/updatunitentrylpj',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if(response.status == "success") {
+                            alert(response.message)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if(response.status == "error") {
+                            alert(response.message)
+                        }
+                    }
+                });
+            });
+        
+        })
+    }
+</script>
+
+<script>
+    var kategori = $('#idkategori').val();
+    if(kategori == 5) {
+        $(document).ready(function() {
+        
+            $('#jasa').val(0);
+            $('#part').val(0);
+            $('#oli').val(0);
+        
+            var id = $('input[name="id"]').val();
+        
+            $.ajax({
+                url: '/cabang/getrevenuelpj',
+                type: 'POST',
+                data: {id: id,model:'proposal',_token: $('input[name="_token"]').val()},
+                success: function(response) {
+                    if(response.status == "success") {
+                        var items = response.data
+                        $('#jasa').val(items.jasa);
+                        $('#part').val(items.part);
+                        $('#oli').val(items.oli);
+                        var total = items.jasa + items.part + items.oli;
+        
+                        $('#total').val(total);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if(response.status == "error") {
+                        alert(response.message)
+                    }
+                }
+            });
+        
+            $('#jasa, #part, #oli').on('input', function() {
+                var jasa = parseInt($('#jasa').val()) || 0;
+                var part = parseInt($('#part').val()) || 0;
+                var oli = parseInt($('#oli').val()) || 0;
+        
+                var total = jasa + part + oli;
+        
+                $('#total').val(total);
+            })
+        
+            $('#simpanrevenue').on('click',function(event) {
+        
+                var id = $('input[name="id"]').val();
+                var jasaact = $('#jasa').val() || 0;
+                var partact = $('#part').val() || 0;
+                var oliact = $('#oli').val() || 0;
+        
+                var formData = {
+                    id: id,
+                    model: 'proposal',
+                    jasa: parseInt(jasaact),
+                    part: parseInt(partact),
+                    oli: parseInt(oliact),
+                    _token: $('input[name="_token"]').val()
+                };
+        
+                // console.log(formData)
+        
+                $.ajax({
+                    url: '/cabang/updaterevenuelpj',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if(response.status == "success") {
+                            alert(response.message)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if(response.status == "error") {
+                            alert(response.message)
+                        }
+                    }
+                });
+            });
+        
+        })
+    }
+</script>
     <script type="text/javascript">
         $('.data-lokasi').select2(
         //     {
@@ -1037,8 +1352,8 @@ rel="stylesheet"
                 $(this).parent().parent().remove();
             });
             totaldana();
-            totalrevenue();
-            totalunitentry();
+            // totalrevenue();
+            // totalunitentry();
         });
     </script>
 

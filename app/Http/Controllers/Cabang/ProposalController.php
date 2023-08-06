@@ -144,7 +144,7 @@ class ProposalController extends Controller
         $datalokasi         = Lokasi::where('kota_lokasi', 'LIKE', '%'.$kota->kota_dealer.'%')->get();
         $datadisplay        = Display::get();
         $datafinance        = FinanceCompany::get();
-        $salespeople        = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->get();
+        $salespeople        = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->where('isActive',1)->get();
         $data               = Proposal::where('uuid', request()->id)->first();
         $datadana           = json_decode($data->dana_proposal ?? null, true);
         $datasalespeople    = json_decode($data->sales_people_proposal ?? null, true);
@@ -169,7 +169,7 @@ class ProposalController extends Controller
             $datalokasi         = Lokasi::get();
             $datadisplay        = Display::get();
             $datafinance        = FinanceCompany::get();
-            $salespeople        = SalesPeople::get();
+            $salespeople        = SalesPeople::where('isActive',1)->get();
             $data               = Proposal::where('uuid', request()->id)->first();
             $datadana           = json_decode($data->dana_proposal ?? null, true);
             $datasalespeople    = json_decode($data->sales_people_proposal ?? null, true);

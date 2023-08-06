@@ -93,6 +93,8 @@
                 <div class="card mb-2 bg-gray-500 text-white" style="border-radius: 5px; font-size: 12px;">
                     <div class="row p-2 font-weight-bold">
                         <div class="col p-0 pl-3">Status</div>
+                        <div class="col p-0">Start Date</div>
+                        <div class="col p-0">End Date</div>
                         <div class="col p-0">Proposal</div>
                         <div class="col p-0">Lokasi</div>
                         <div class="col p-0">Penanggung Jawab</div>
@@ -143,6 +145,16 @@
                                                 @endif
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <div class="text-muted" style="color: #ec1b25">
+                                        {{ $data->periode_start_proposal ? \Carbon\Carbon::createFromFormat('Y-m-d', $data->periode_start_proposal)->format('d-m-Y') : '' }}
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <div class="text-muted" style="color: #ec1b25">
+                                        {{ $data->periode_end_proposal ? \Carbon\Carbon::createFromFormat('Y-m-d', $data->periode_end_proposal)->format('d-m-Y') : '' }}
                                     </div>
                                 </div>
                                 <div class="col p-0">

@@ -21,6 +21,7 @@ class SalesPeople extends Model
         'keterangan_sales_people',
         'pameran_ruko_start',
         'pameran_ruko_end',
+        'isActive',
     ];
 
     //ALTER TABLE `sales_people` ADD `pameran_ruko_start` VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `keterangan_sales_people`, ADD `pameran_ruko_end` VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `pameran_ruko_start`;

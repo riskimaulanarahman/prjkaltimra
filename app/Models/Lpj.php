@@ -8,6 +8,7 @@ use App\Models\Proposal;
 use App\Models\Lokasi;
 use Illuminate\Support\Carbon;
 use App\Models\LpjKonsumen;
+use App\Models\ApprovalLpj;
 
 class Lpj extends Model
 {
@@ -46,6 +47,11 @@ class Lpj extends Model
     public function konsumen()
     {
         return $this->hasMany(LpjKonsumen::class, 'id_lpj', 'id');
+    }
+
+    public function approval()
+    {
+        return $this->hasMany(ApprovalLpj::class, 'id_lpj', 'id');
     }
 
 

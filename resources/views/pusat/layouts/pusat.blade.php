@@ -15,11 +15,15 @@
 
     @stack('before-styles')
     <link href="{{ '/css/backend.css' }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/23.1.4/css/dx.light.css">
 
 
     {{-- <livewire:styles /> --}}
     @stack('after-styles')
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+ 
+    <!-- DevExtreme library -->
 
     <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
     <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.mapbox.css' rel='stylesheet' />
@@ -34,6 +38,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
+
 
     <style>
         .c-sidebar {

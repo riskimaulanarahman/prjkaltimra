@@ -94,12 +94,12 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="row form-group">
+                                                    {{-- <div class="row form-group">
                                                         <label class="col-sm-3 control-label">No Telepon<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                         <div class="col-sm-9">
                                                             <input class="form-control" name="notelp" value="{{ $konsumen->notelp }}" required>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="row form-group">
                                                         <label class="col-sm-3 control-label">Gender<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                         <div class="col-sm-9">
@@ -153,12 +153,12 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="row form-group">
+                                                    {{-- <div class="row form-group">
                                                         <label class="col-sm-3 control-label">Pendapatan<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                         <div class="col-sm-9">
                                                             <input class="form-control" name="pendapatan" value="{{ $konsumen->pendapatan }}" required>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="row form-group">
                                                         <label class="col-sm-3 control-label">Pengeluaran / Bulan</label>
                                                         <div class="col-sm-9">
@@ -179,28 +179,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <div class="row form-group">
-                                                        <label class="col-sm-3 control-label">Range DP Konsumen</label>
-                                                        <div class="col-sm-9">
-                                                            <select name="dp" class="form-control">
-                                                                @if ($konsumen->dp)
-                                                                    <option value="{{ $konsumen->dp }}">{{ $konsumen->dp_($konsumen->dp)}}</option>
-                                                                @endif
-                                                                <option value=""></option>
-                                                                <option value="1">≤ 1 jt</option>
-                                                                <option value="2">1 - 2 jt</option>
-                                                                <option value="3">2 - 3 jt</option>
-                                                                <option value="4">3 - 4 jt</option>
-                                                                <option value="5">4 - 5 jt</option>
-                                                                <option value="6">5 - 6 jt</option>
-                                                                <option value="7">6 - 7 jt</option>
-                                                                <option value="8">7 - 8 jt</option>
-                                                                <option value="9">8 - 9 jt</option>
-                                                                <option value="10">9 - 10 jt</option>
-                                                                <option value="11">> 10 jt</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                    
                                                     <div class="row form-group">
                                                         <label class="col-sm-3 control-label">Merk Motor Sebelumnya<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                         <div class="col-sm-9">
@@ -274,6 +253,28 @@
                                                         </div>
                                                     </div>
                                                     <div class="row form-group">
+                                                        <label class="col-sm-3 control-label">Range DP Konsumen</label>
+                                                        <div class="col-sm-9">
+                                                            <select name="dp" class="form-control">
+                                                                @if ($konsumen->dp)
+                                                                    <option value="{{ $konsumen->dp }}">{{ $konsumen->dp_($konsumen->dp)}}</option>
+                                                                @endif
+                                                                <option value=""></option>
+                                                                <option value="1">≤ 1 jt</option>
+                                                                <option value="2">1 - 2 jt</option>
+                                                                <option value="3">2 - 3 jt</option>
+                                                                <option value="4">3 - 4 jt</option>
+                                                                <option value="5">4 - 5 jt</option>
+                                                                <option value="6">5 - 6 jt</option>
+                                                                <option value="7">6 - 7 jt</option>
+                                                                <option value="8">7 - 8 jt</option>
+                                                                <option value="9">8 - 9 jt</option>
+                                                                <option value="10">9 - 10 jt</option>
+                                                                <option value="11">> 10 jt</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
                                                         <label class="col-sm-3 control-label">Finance Company</label>
                                                         <div class="col-sm-9">
                                                             <select name="finance" class="form-control">
@@ -283,7 +284,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="row form-group">
+                                                    {{-- <div class="row form-group">
                                                         <label class="col-sm-3 control-label">Hasil<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                         <div class="col-sm-9">
                                                             <select name="hasil" class="form-control" required>
@@ -298,7 +299,8 @@
                                                                 <option value="5">Reject</option>
                                                             </select>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
+                                                    <input type="hidden" name="hasil" value="4">
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="row form-group">
@@ -350,12 +352,12 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row form-group">
+                                                        {{-- <div class="row form-group">
                                                             <label class="col-sm-3 control-label">No Telepon<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                             <div class="col-sm-9">
                                                                 <input class="form-control" name="notelp" required>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="row form-group">
                                                             <label class="col-sm-3 control-label">Gender<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                             <div class="col-sm-9">
@@ -418,25 +420,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-6">
-                                                        <div class="row form-group">
-                                                            <label class="col-sm-3 control-label">Range DP Konsumen<strong id="dp_" style="float: right; color:rgb(243, 0, 0); display:none">*</strong></label>
-                                                            <div class="col-sm-9">
-                                                                <select name="dp" class="form-control" id="dp">
-                                                                    <option value=""></option>
-                                                                    <option value="1">≤ 1 jt</option>
-                                                                    <option value="2">1 - 2 jt</option>
-                                                                    <option value="3">2 - 3 jt</option>
-                                                                    <option value="4">3 - 4 jt</option>
-                                                                    <option value="5">4 - 5 jt</option>
-                                                                    <option value="6">5 - 6 jt</option>
-                                                                    <option value="7">6 - 7 jt</option>
-                                                                    <option value="8">7 - 8 jt</option>
-                                                                    <option value="9">8 - 9 jt</option>
-                                                                    <option value="10">9 - 10 jt</option>
-                                                                    <option value="11">> 10 jt</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
+                                                        
                                                         <div class="row form-group">
                                                             <label class="col-sm-3 control-label">Merk Motor Sebelumnya<strong id="merkmotor_" style="float: right; color:rgb(243, 0, 0); display:none">*</strong></label>
                                                             <div class="col-sm-9">
@@ -492,10 +476,29 @@
                                                         <div class="row form-group">
                                                             <label class="col-sm-3 control-label">Jenis Pembayaran<strong id="jenis_" style="float: right; color:rgb(243, 0, 0); display:none">*</strong></label>
                                                             <div class="col-sm-9">
-                                                                <select name="jenis" id="jenis" class="form-control">
+                                                                <select name="jenis" id="jenis" class="form-control" onchange="kondisijenis()">
                                                                     <option value=""></option>
                                                                     <option value="1">CASH</option>
                                                                     <option value="2">CREDIT</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <label class="col-sm-3 control-label">Range DP Konsumen<strong id="dp_" style="float: right; color:rgb(243, 0, 0); display:none">*</strong></label>
+                                                            <div class="col-sm-9">
+                                                                <select name="dp" class="form-control" id="dp" required>
+                                                                    <option value=""></option>
+                                                                    <option value="1">≤ 1 jt</option>
+                                                                    <option value="2">1 - 2 jt</option>
+                                                                    <option value="3">2 - 3 jt</option>
+                                                                    <option value="4">3 - 4 jt</option>
+                                                                    <option value="5">4 - 5 jt</option>
+                                                                    <option value="6">5 - 6 jt</option>
+                                                                    <option value="7">6 - 7 jt</option>
+                                                                    <option value="8">7 - 8 jt</option>
+                                                                    <option value="9">8 - 9 jt</option>
+                                                                    <option value="10">9 - 10 jt</option>
+                                                                    <option value="11">> 10 jt</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -510,10 +513,11 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row form-group">
+                                                        {{-- <div class="row form-group">
                                                             <label class="col-sm-3 control-label">Hasil<strong style="color:rgb(243, 0, 0)">*</strong></label>
                                                             <div class="col-sm-9">
                                                                 <select name="hasil" id="hasil" class="form-control" onchange="kondisihasil()" required>
+                                                                    <option value="">- Select -</option>
                                                                     <option value="1">Database</option>
                                                                     <option value="2">Prospecting</option>
                                                                     <option value="3">Polling</option>
@@ -521,7 +525,9 @@
                                                                     <option value="5">Reject</option>
                                                                 </select>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
+                                                        <input type="hidden" name="hasil" value="4">
+
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="row form-group">
@@ -546,7 +552,7 @@
                                                             <th>Tgl Lahir</th>
                                                             <th>Usia</th>
                                                             <th>Alamat</th>
-                                                            <th>No Telepon</th>
+                                                            {{-- <th>No Telepon</th> --}}
                                                             <th>Pekerjaan</th>
                                                             <th>Pengeluaran</th>
                                                             <th>Range DP</th>
@@ -560,7 +566,7 @@
                                                             <th>Sales Prople</th>
                                                             <th>CASH/CREDIT</th>
                                                             <th>Finance Company</th>
-                                                            <th>Hasil</th>
+                                                            {{-- <th>Hasil</th> --}}
                                                             <th width="40"></th>
                                                         </tr>
                                                     </thead>
@@ -576,7 +582,7 @@
                                                                 <td>{{ $data_ko->tgl_lahir }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($data_ko->tgl_lahir)->age }} Tahun</td>
                                                                 <td>{{ $data_ko->alamat }}</td>
-                                                                <td>{{ $data_ko->notelp }}</td>
+                                                                {{-- <td>{{ $data_ko->notelp }}</td> --}}
                                                                 <td>{{ $data_ko->pekerjaan_($data_ko->pekerjaan) }}</td>
                                                                 <td>{{ $data_ko->pengeluaran_($data_ko->pengeluaran) }}</td>
                                                                 <td>{{ $data_ko->dp_($data_ko->dp) }}</td>
@@ -590,7 +596,7 @@
                                                                 <td>{{ $data_ko->sales->nama_sales_people }}</td>
                                                                 <td>{{ $data_ko->jenis($data_ko->cash_credit)}}</td>
                                                                 <td>{{ $data_ko->finance ? $data_ko->finance->nama : '-' }}</td>
-                                                                <td>{{ $data_ko->hasil_($data_ko->hasil) }}</td>
+                                                                {{-- <td>{{ $data_ko->hasil_($data_ko->hasil) }}</td> --}}
                                                                 <td class="text-center">
                                                                     <a href="{{ route('cabang.lpj.getCreateFive') }}/?metode=edit&idkonsumen={{ $data_ko->id }}&id={{ request()->id }}" class="btn btn-warning btn-sm m-0" style="padding: 0.15rem 0.3rem; font-size: 0.7rem;">
                                                                         <i class="fas fa-edit"></i>
@@ -648,6 +654,28 @@
                     }]
                 });
         });
+
+        function kondisijenis() {
+            var jenisSelect = document.getElementById("jenis");
+            var value = jenisSelect.value;
+            var dpInput = document.getElementById("dp");
+            var dpInput_ = document.getElementById("dp_");
+            var financeInput = document.getElementById("finance");
+            var financeInput_ = document.getElementById("finance_");
+
+            if (value == "2") {
+                dpInput.required = true;
+                financeInput.required = true;
+                dpInput_.style.display = 'block';
+                financeInput_.style.display = 'block';
+            } else if (value == "1") {
+                dpInput.required = false;
+                financeInput.required = false;
+                dpInput_.style.display = 'none';
+                financeInput_.style.display = 'none';
+            }
+        }
+
     </script>
     <script>
         function kondisihasil() {

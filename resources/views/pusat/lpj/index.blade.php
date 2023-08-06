@@ -164,6 +164,7 @@
                         <div class="col p-0">End Date</div>
                         <div class="col p-0">Proposal</div>
                         <div class="col p-0">Dealer</div>
+                        <div class="col p-0">Lokasi</div>
                         <div class="col p-0">Database</div>
                         <div class="col p-0">Prospecting</div>
                         <div class="col p-0">Penjualan</div>
@@ -177,7 +178,7 @@
                 $first  = 0;
                 $end    = 0;
                 @endphp
-
+{{-- {{dd($datas)}} --}}
                 @foreach($datas as $key => $data)
                     <div href="#" style="text-decoration: none;">
                         <div class="card mb-2" style="border-radius: 5px; font-size: 12px">
@@ -192,7 +193,23 @@
                                                     </span>
                                                 @elseif ($data->status_lpj == 2)
                                                     <span class="btn btn-sm btn-success ms-auto">
-                                                        SUBMIT
+                                                        Approved
+                                                    </span>
+                                                @elseif ($data->status_lpj == 3)
+                                                    <button type="button" class="btn btn-sm btn-danger ms-auto" onclick="detailCancel('{{ $data->uuid }}')">
+                                                        CANCEL
+                                                    </button>
+                                                @elseif ($data->status_lpj == 4)
+                                                    <span class="btn btn-sm btn-info">
+                                                        Waiting Approval
+                                                    </span>
+                                                @elseif ($data->status_lpj == 5)
+                                                    <span class="btn btn-sm btn-danger">
+                                                        Reject
+                                                    </span>
+                                                @elseif ($data->status_lpj == 6)
+                                                    <span class="btn btn-sm btn-warning">
+                                                        Revisi
                                                     </span>
                                                 @endif
 
@@ -217,6 +234,9 @@
                                     </div>
                                 </div>
                                 <div class="col p-0 pl-3">
+                                    {{ $data->lokasi->kota_lokasi.', '.$data->lokasi->kecamatan_lokasi.', '.$data->lokasi->kelurahan_lokasi ?? '' }}
+                                </div>
+                                <div class="col p-0 pl-3">
                                     {{ $data->target_database_lpj ?? '' }}
                                 </div>
                                 <div class="col p-0 pl-3">
@@ -233,11 +253,42 @@
                                         {{ $data->updated_at }}
                                     </div>
                                 </div>
+                                {{-- {{$data->approval}} --}}
+                                @php
+                                $approvals = json_decode($data->approval, true);
+                                
+                                if (!is_array($approvals)) {
+                                    // Handle the case when $approvals is not a valid JSON array
+                                    // For example, you might set $firstArrayWithNullStatus to null or take any other appropriate action
+                                    $firstArrayWithNullStatus = null;
+                                } else {
+                                    // Convert the array to a Laravel collection for easier manipulation
+                                    $collection = collect($approvals);
+
+                                    // Filter the collection to get the first array where status_approval is null
+                                    $firstArrayWithNullStatus = $collection->where('status_approval', null)->first();
+                                }
+
+                                $userApprovalId = Auth::guard('pusat')->user()->id;
+                                if($firstArrayWithNullStatus && $firstArrayWithNullStatus['user_approval'] == $userApprovalId && $data->status_lpj == 4) {
+                                    $isme = 1;
+                                } else {
+                                    $isme = 0;
+                                }
+
+                                @endphp
+                           
                                 <div class="col text-right pr-4">
                                     <div class="btn-group dropleft">
-                                        <a href="{{ route('pusat.lpj.getShow') }}?id={{ $data->uuid }}" class="btn btn-sm btn-outline-dark">
-                                            <i class="cil-search"></i> Lihat
-                                        </a>
+                                        @if($isme == 1)
+                                            <a href="{{ route('pusat.lpj.getShow') }}?id={{ $data->uuid }}" class="btn btn-sm btn-info">
+                                                <i class="cil-pencil"></i> Approval
+                                            </a>
+                                        @else
+                                            <a href="{{ route('pusat.lpj.getShow') }}?id={{ $data->uuid }}" class="btn btn-sm btn-outline-dark">
+                                                <i class="cil-search"></i> Lihat
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

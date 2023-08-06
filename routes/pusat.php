@@ -63,4 +63,15 @@ $maindealerRoutes = function() {
 
     Route::auto('/proposal', App\Http\Controllers\Pusat\ProposalController::class);
     Route::auto('/lpj', App\Http\Controllers\Pusat\LpjController::class);
+
+    Route::post('/getrevenuelpj','App\Http\Controllers\Pusat\LpjController@getrevenuelpj');
+    Route::post('/updaterevenuelpj','App\Http\Controllers\Pusat\LpjController@updaterevenuelpj');
+
+    Route::post('/getunitentrylpj','App\Http\Controllers\Pusat\LpjController@getunitentrylpj');
+    Route::post('/updatunitentrylpj','App\Http\Controllers\Pusat\LpjController@updatunitentrylpj');
+
+    Route::post('/updatelpjapproval','App\Http\Controllers\Pusat\LpjController@updatelpjapproval');
+
+    Route::get('/getcostunit','App\Http\Controllers\Pusat\LpjController@getcostunit');
+
 };

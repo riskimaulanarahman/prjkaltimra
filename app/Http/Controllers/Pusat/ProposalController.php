@@ -88,7 +88,8 @@ class ProposalController extends Controller
                         ->statusProposal(request()->status)
                         ->cariDealer(request()->dealer)
                         ->area(request()->area)
-                        ->where('status_proposal', '!=', 1)
+                        ->whereNotIn('status_proposal', [1,5,6])
+                        // ->where('status_proposal', '!=', 1)
                         ->when(request()->bulan, function ($query) {
                             if(request()->bulan != 'SEMUA' ){
                                 $query->whereMonth('periode_start_proposal', request()->bulan);
@@ -102,6 +103,9 @@ class ProposalController extends Controller
                         })
                         ->where('inbox_md', true)
                         ->where('user_approval', Auth::guard('pusat')->user()->jabatan)
+                        // ->toSql();
+                        // return Auth::guard('pusat')->user()->jabatan;
+                        // return $datas;
                         ->paginate(10);
         } else {
             $datas   = Proposal::orderBy('updated_at', 'ASC')
@@ -111,7 +115,8 @@ class ProposalController extends Controller
                         ->statusProposal(request()->status)
                         ->cariDealer(request()->dealer)
                         ->area(request()->area)
-                        ->where('status_proposal', '!=', 1)
+                        // ->where('status_proposal', '!=', 1)
+                        ->whereNotIn('status_proposal', [1,5,6])
                         ->when(request()->tanggal_mulai, function ($query) {
                             $query->whereBetween('periode_start_proposal', [request()->tanggal_mulai, request()->tanggal_akhir])
                                   ->whereBetween('periode_end_proposal', [request()->tanggal_mulai, request()->tanggal_akhir]);
@@ -297,7 +302,7 @@ class ProposalController extends Controller
         $datalokasi         = Lokasi::get();
         $datadisplay        = Display::get();
         $datadealer         = Dealer::get();
-        $salespeople        = SalesPeople::get();
+        $salespeople        = SalesPeople::where('isActive',1)->get();
         $datafinance        = FinanceCompany::get();
         $data               = Proposal::where('uuid', request()->id)->first();
         $datadana           = json_decode($data->dana_proposal  ?? null, true);
@@ -321,7 +326,7 @@ class ProposalController extends Controller
             $datalokasi         = Lokasi::get();
             $datadisplay        = Display::get();
             $datadealer         = Dealer::get();
-            $salespeople        = SalesPeople::get();
+            $salespeople        = SalesPeople::where('isActive',1)->get();
             $datafinance        = FinanceCompany::get();
             $data               = Proposal::where('uuid', request()->id)->first();
             $datadana           = json_decode($data->dana_proposal  ?? null, true);

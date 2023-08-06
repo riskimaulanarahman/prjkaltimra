@@ -64,4 +64,11 @@ $dealerRoutes = function() {
     Route::post('/lpjcontinue', 'App\Http\Controllers\Cabang\Lpjcontroller@lpjcontinue');
     Route::post('/getlpjdata', 'App\Http\Controllers\Cabang\Lpjcontroller@getlpjdata');
 
+    Route::post('/getrevenuelpj','App\Http\Controllers\Cabang\Lpjcontroller@getrevenuelpj');
+    Route::post('/updaterevenuelpj','App\Http\Controllers\Cabang\Lpjcontroller@updaterevenuelpj');
+
+    Route::post('/getunitentrylpj','App\Http\Controllers\Cabang\Lpjcontroller@getunitentrylpj');
+    Route::post('/updatunitentrylpj','App\Http\Controllers\Cabang\Lpjcontroller@updatunitentrylpj');
+
+
 };

@@ -73,8 +73,11 @@
                 <div class="card mb-2 bg-gray-500 text-white" style="border-radius: 5px; font-size: 12px;">
                     <div class="row p-2 font-weight-bold">
                         <div class="col-1 p-0 pl-3">Status</div>
+                        <div class="col p-0">Start Date</div>
+                        <div class="col p-0">End Date</div>
                         <div class="col p-0">Proposal</div>
                         <div class="col p-0">Penanggung Jawab</div>
+                        <div class="col p-0">Lokasi</div>
                         <div class="col p-0">Database</div>
                         <div class="col p-0">Prospecting</div>
                         <div class="col p-0">Penjualan</div>
@@ -103,16 +106,38 @@
                                                     </span>
                                                 @elseif ($data->status_lpj == 2)
                                                     <span class="btn btn-sm btn-success ms-auto">
-                                                        SUBMIT
+                                                        Approved
                                                     </span>
                                                 @elseif ($data->status_lpj == 3)
                                                     <button type="button" class="btn btn-sm btn-danger ms-auto" onclick="detailCancel('{{ $data->uuid }}')">
                                                         CANCEL
                                                     </button>
+                                                @elseif ($data->status_lpj == 4)
+                                                    <span class="btn btn-sm btn-info">
+                                                        Waiting
+                                                    </span>
+                                                @elseif ($data->status_lpj == 5)
+                                                    <span class="btn btn-sm btn-danger">
+                                                        Reject
+                                                    </span>
+                                                @elseif ($data->status_lpj == 6)
+                                                    <span class="btn btn-sm btn-warning">
+                                                        Revisi
+                                                    </span>
                                                 @endif
 
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <div class="text-muted" style="font-size: 10px">
+                                        {{ $data->periode_start_lpj }}
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <div class="text-muted" style="font-size: 10px">
+                                        {{ $data->periode_end_lpj }}
                                     </div>
                                 </div>
                                 <div class="col p-0">
@@ -123,6 +148,11 @@
                                 <div class="col p-0">
                                     <div class="font-weight-bold" style="color: #222222">
                                         {{ $data->proposal->pj->nama_sales_people ?? '' }}
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <div class="text-muted" style="font-size: 10px">
+                                        {{ $data->tempat_lpj }}
                                     </div>
                                 </div>
                                 <div class="col p-0">
@@ -139,7 +169,7 @@
                                 </div>
                                 <div class="col p-0">
                                     <div class="text-muted" style="font-size: 10px">
-                                        {{ $data->created_at }}
+                                        {{ $data->updated_at }}
                                     </div>
                                 </div>
                                 <div class="col-2 p-0 text-right pr-3">
@@ -148,12 +178,14 @@
                                         <a href="{{ route('cabang.lpj.getShow') }}?id={{ $data->uuid }}" class="btn btn-sm btn-outline-dark">
                                             <i class="cil-search"></i> Lihat
                                         </a>
+                                        @endif
+                                        @if($data->status_lpj == 6)
                                         <a href="{{ route('cabang.lpj.getCreateOne') }}?id={{ $data->uuid }}" class="btn btn-sm btn-outline-warning">
                                             <i class="cil-pencil"></i> Edit
                                         </a>
-                                        <a  class="btn btn-sm btn-outline-danger" href="{{ route('cabang.lpj.getHapusLpj') }}?&id={{ $data->id }}" onclick="return confirm('Konfirmasi Hapus LPJ ?')">
+                                        {{-- <a  class="btn btn-sm btn-outline-danger" href="{{ route('cabang.lpj.getHapusLpj') }}?&id={{ $data->id }}" onclick="return confirm('Konfirmasi Hapus LPJ ?')">
                                             <i class="cil-trash"></i> Hapus
-                                        </a>
+                                        </a> --}}
                                         @endif
                                     </div>
                                 </div>

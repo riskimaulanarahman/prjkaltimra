@@ -19,6 +19,10 @@ use Illuminate\Http\Request;
 use App\Models\Display;
 use Intervention\Image\Facades\Image;
 use App\Models\LpjDokumentasi;
+use App\Models\LpjRevenue;
+use App\Models\LpjUnitentry;
+use App\Models\ApprovalLpj;
+use App\Models\Pusat;
 use Illuminate\Support\Carbon;
 
 class LpjController extends Controller
@@ -41,7 +45,7 @@ class LpjController extends Controller
                  ->pj(request()->namapj)
                  ->kategori(request()->kategori)
                  ->submitDate(request()->tanggal)
-                 ->orderBy('created_at', 'DESC')
+                 ->orderBy('submit_date', 'asc')
                  ->paginate(10);
 
         return view('cabang.lpj.index', compact('datas', 'datakategori'));
@@ -64,21 +68,26 @@ class LpjController extends Controller
                             // ->doesnthave('lpj')
                             ->orderBy('created_at', 'DESC')
                             ->paginate(10);
+        // return $datas;
+
 
         return view('cabang.lpj.create-data', compact('datas', 'datalokasi', 'datakategori'));
     }
 
     public function getDataLpj() {
         $datakategori = KategoriProposal::get();
+        // return $datakategori;
         $datas = Lpj::whereHas('proposal', function (Builder $query) {
                     $query->where('dealer_proposal', Auth::guard('cabang')->user()->dealer);
                  })
                  ->pj(request()->namapj)
                  ->kategori(request()->kategori)
                  ->submitDate(request()->tanggal)
-                 ->whereIn('status_lpj', [2,3])
-                 ->orderBy('created_at', 'DESC')
+                 ->whereIn('status_lpj', [2,3,4,5,6])
+                 ->orderBy('lpjs.updated_at', 'desc')
                  ->paginate(10);
+
+        // return $datas;
 
         return view('cabang.lpj.index', compact('datas', 'datakategori'));
     }
@@ -362,7 +371,7 @@ class LpjController extends Controller
 
         $kota           = Dealer::find(Auth::guard('cabang')->user()->dealer);
         $datalokasi     = Lokasi::where('kota_lokasi', 'LIKE', '%'.$kota->kota_dealer.'%')->get();
-        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->get();
+        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->where('isActive',1)->get();
         $datafinance    = FinanceCompany::get();
         $datadana       = json_decode($data->dana_lpj ?? null, true);
         $datakonsumen   = LpjKonsumen::where('id_lpj', $data->id)->get();
@@ -376,7 +385,7 @@ class LpjController extends Controller
             if($cekkonsumen != $data->target_penjualan_lpj){
                 return redirect()->back()->withFlashDanger('Jumlah Konsumen Tidak Sesuai Inputan Data Penjualan. Mohon Sesuaikan !');
             } else {
-                $data->status_lpj  = 2;
+                $data->status_lpj  = 4;
                 $data->submit_date = Carbon::now();
                 $data->save();
 
@@ -393,7 +402,7 @@ class LpjController extends Controller
 
         $kota           = Dealer::find(Auth::guard('cabang')->user()->dealer);
         $datalokasi     = Lokasi::where('kota_lokasi', 'LIKE', '%'.$kota->kota_dealer.'%')->get();
-        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->get();
+        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->where('isActive',1)->get();
         $datafinance    = FinanceCompany::get();
         $datadana       = json_decode($data->dana_lpj ?? null, true);
         $datakonsumen   = LpjKonsumen::where('id_lpj', $data->id)->get();
@@ -543,12 +552,19 @@ class LpjController extends Controller
 
         $kota           = Dealer::find(Auth::guard('cabang')->user()->dealer);
         $datalokasi     = Lokasi::where('kota_lokasi', 'LIKE', '%'.$kota->kota_dealer.'%')->get();
-        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->get();
+        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->where('isActive',1)->get();
         $datafinance    = FinanceCompany::get();
         $datadana       = json_decode($data->dana_lpj ?? null, true);
         $datakonsumen   = LpjKonsumen::where('id_lpj', $data->id)->get();
         $datadisplay    = Display::get();
         $konsumen       = LpjKonsumen::find(request()->idkonsumen);
+
+        $dataapproval = ApprovalLpj::where('id_lpj', $data->id)
+        ->select(['approval_lpjs.*', 'pusats.jabatan as jabatan_p'])
+        ->join('pusats', 'approval_lpjs.user_approval', '=', 'pusats.id')
+        ->orderBy('approval_lpjs.created_at')
+        ->orderBy('pusats.jabatan')
+        ->get();
 
         if (request()->submit == 'draft') {
             return redirect()->route('cabang.lpj.index')->withFlashSuccess('Lpj Berhasil Tersimpan  ! ✅');
@@ -564,14 +580,14 @@ class LpjController extends Controller
             }
         }
 
-        return view('cabang.lpj.show', compact('datalokasi', 'salespeople', 'datafinance', 'data', 'datadana', 'datakonsumen', 'datadisplay', 'konsumen'));
+        return view('cabang.lpj.show', compact('datalokasi', 'salespeople', 'datafinance', 'data', 'datadana', 'datakonsumen', 'datadisplay', 'konsumen','dataapproval'));
     }
 
     public function getCreate(Request $request) {
 
         $kota           = Dealer::find(Auth::guard('cabang')->user()->dealer);
         $datalokasi     = Lokasi::where('kota_lokasi', 'LIKE', '%'.$kota->kota_dealer.'%')->get();
-        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->get();
+        $salespeople    = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->where('isActive',1)->get();
         $datafinance    = FinanceCompany::get();
         $data           = Lpj::where('uuid', request()->id)->first();
         $datadana       = json_decode($data->dana_lpj ?? null, true);
@@ -673,7 +689,7 @@ class LpjController extends Controller
     public function getKonsumen() {
 
         $datalokasi   = Lokasi::get();
-        $salespeople  = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->get();
+        $salespeople  = SalesPeople::where('dealer_sales_people', Auth::guard('cabang')->user()->dealer)->where('isActive',1)->get();
         $datafinance  = FinanceCompany::get();
         $data         = LpjKonsumen::find(request()->id);
 
@@ -727,13 +743,17 @@ class LpjController extends Controller
     public function lpjcancel(Request $request) {
         try {
             $data = Lpj::where('uuid',$request->uuid)->first();
+            $getproposal = Proposal::find($data->id_proposal);
+
             $data->status_lpj = 3;
             $data->isCancel = 1;
             $data->reason = $request->reason;
             $data->actionplan = $request->actionplan;
+            $data->tempat_lpj = $getproposal->tempat_proposal;
+            $data->periode_start_lpj = $getproposal->periode_start_proposal;
+            $data->periode_end_lpj = $getproposal->periode_end_proposal;
             $data->save();
 
-            $getproposal = Proposal::find($data->id_proposal);
             $getproposal->isCancel = 1;
             $getproposal->save();
             // return $data;
@@ -762,12 +782,231 @@ class LpjController extends Controller
         try {
             $data = Lpj::where('uuid',$request->uuid)->first();
 
+            
+            $checkapprlpj = ApprovalLpj::where('id_lpj', $data->id)->get();
+            if(count($checkapprlpj) < 1) {
+                $batas = 2; // promotion processor & promotion supervisor
+                $approval = Pusat::orderBy('jabatan', 'ASC')->get();
+                foreach ($approval->sortBy('jabatan') as $app) {
+                    if ($app->jabatan <= $batas) {
+                        $isiapproval = new ApprovalLpj;
+                        $isiapproval->id_lpj   = $data->id;
+                        $isiapproval->user_approval = $app->id;
+                        $isiapproval->save();
+                    }
+                }
+            }
+
             return response()->json($data)->setEncodingOptions(JSON_NUMERIC_CHECK);
 
             // return response()->json(["status" => "success", "message" => "Berhasil Simpan Data"]);
 
         } catch (\Throwable $th) {
             return redirect()->back()->withFlashDanger('Terjadi Kesalahan !, '.$th);
+        }
+    }
+
+    public function getrevenuelpj(Request $request) {
+        try {
+            $id = $request->input('id');
+            $model = $request->input('model');
+
+            if($model == 'proposal') {
+                $getid = Proposal::where('uuid',$id)->first();
+                $data = LpjRevenue::where('proposal_id',$getid->id)->with('lpj')->first();
+            } else {
+                $getid = Lpj::leftJoin('proposals','lpjs.id_proposal','=','proposals.id')
+                ->select('lpjs.*','proposals.id as idproposal')
+                ->where('lpjs.uuid',$id)
+                ->first();
+                $data = LpjRevenue::where('proposal_id',$getid->idproposal)->with('lpj')->first();
+            }
+
+            if (!$data) {
+                $data = new LpjRevenue();
+                $data->proposal_id = $getid->id;
+                $data->jasa = 0;
+                $data->jasa_act = 0;
+                $data->part = 0;
+                $data->part_act = 0;
+                $data->oli = 0;
+                $data->oli_act = 0;
+                $data->save();
+
+            }
+    
+            return response()->json(["status" => "success", "message" => "Data Berhasil Disimpan", "data" => $data])->setEncodingOptions(JSON_NUMERIC_CHECK);
+
+        } catch (\Throwable $th) {
+
+            return response()->json(["status" => "error", "message" => $th]);
+
+        }
+    }
+
+    public function updaterevenuelpj(Request $request) {
+        try {
+            //actual
+            $id = $request->input('id');
+            $model = $request->input('model');
+
+            if($model == 'proposal') {
+                $jasa = $request->input('jasa');
+                $part = $request->input('part');
+                $oli = $request->input('oli');
+                $getid = Proposal::where('uuid',$id)->first();
+                $data = LpjRevenue::where('proposal_id',$getid->id)->first();
+    
+                if (!$data) {
+                    $data = new LpjRevenue();
+                    $data->proposal_id = $getid->id;
+                }
+        
+                $data->jasa = $jasa;
+                $data->part = $part;
+                $data->oli = $oli;
+                $data->save();
+
+            } else {
+
+                $jasa = $request->input('jasa_act');
+                $part = $request->input('part_act');
+                $oli = $request->input('oli_act');
+                $lpj = Lpj::leftJoin('proposals','lpjs.id_proposal','=','proposals.id')
+                ->select('lpjs.*','proposals.id as idproposal')
+                ->where('lpjs.uuid',$id)->first();
+                $data = LpjRevenue::where('proposal_id',$lpj->idproposal)->first();
+    
+                if (!$data) {
+                    $data = new LpjRevenue();
+                    $data->proposal_id = $lpj->idproposal;
+                }
+        
+                $data->jasa_act = $jasa;
+                $data->part_act = $part;
+                $data->oli_act = $oli;
+                $data->save();
+            }
+
+
+            return response()->json(["status" => "success", "message" => "Data Berhasil Disimpan"])->setEncodingOptions(JSON_NUMERIC_CHECK);
+
+        } catch (\Throwable $th) {
+
+            return response()->json(["status" => "error", "message" => $th]);
+
+        }
+    }
+
+    public function getunitentrylpj(Request $request) {
+        try {
+            $id = $request->input('id');
+            $model = $request->input('model');
+
+            if($model == 'proposal') {
+                $getid = Proposal::where('uuid',$id)->first();
+                $proposalid = $getid->id;
+                $data = LpjUnitentry::where('proposal_id',$getid->id)->with('lpj')->get();
+            } else {
+                $getid = Lpj::
+                // $getid = Lpj::leftJoin('proposals','lpjs.id_proposal','=','proposals.id')
+                // ->select('lpjs.*','proposals.id as idproposal')
+                where('uuid',$id)
+                ->get();
+                $getproposalid = Lpj::where('uuid',$id)->first();
+                $proposalid = $getproposalid->id_proposal;
+                $data = LpjUnitentry::where('proposal_id',$getproposalid->id_proposal)->with('lpj')->get();
+            }
+
+            if (count($data) < 1) {
+                $unitname = [
+                    'kpb_1',
+                    'kpb_2',
+                    'kpb_3',
+                    'kpb_4',
+                    'psl',
+                    'psr',
+                    'go',
+                    'lr'
+                ];
+                foreach ($unitname as $key) {
+                    $data = new LpjUnitentry();
+                    $data->proposal_id = $proposalid;
+                    $data->unit_nama = $key;
+                    $data->unit_jumlah = 0;
+                    $data->unit_jumlahact = 0;
+                    $data->save();
+                }
+
+            }
+    
+            return response()->json(["status" => "success", "message" => "Data Berhasil Disimpan", "data" => $data])->setEncodingOptions(JSON_NUMERIC_CHECK);
+
+        } catch (\Throwable $th) {
+
+            return response()->json(["status" => "error", "message" => $th]);
+
+        }
+    }
+
+    public function updatunitentrylpj(Request $request) {
+        try {
+            $id = $request->input('id');
+            $model = $request->input('model');
+
+            if($model == 'proposal') {
+                $getid = Proposal::where('uuid',$id)->first();
+                $data = LpjUnitentry::where('proposal_id',$getid->id)->with('lpj')->first();
+
+                $unitJumlahData = [
+                    'go' => $request->input('go'),
+                    'kpb_1' => $request->input('kpb1'),
+                    'kpb_2' => $request->input('kpb2'),
+                    'kpb_3' => $request->input('kpb3'),
+                    'kpb_4' => $request->input('kpb4'),
+                    'lr' => $request->input('lr'),
+                    'psl' => $request->input('psl'),
+                    'psr' => $request->input('psr'),
+                ];
+        
+                foreach ($unitJumlahData as $unitNama => $unitJumlah) {
+                    LpjUnitentry::where('proposal_id', $data->proposal_id)
+                        ->where('unit_nama', $unitNama)
+                        ->update(['unit_jumlah' => $unitJumlah]);
+                }
+
+            } else {
+                $getid = Lpj::leftJoin('proposals','lpjs.id_proposal','=','proposals.id')
+                ->select('lpjs.*','proposals.id as idproposal')
+                ->where('lpjs.uuid',$id)
+                ->first();
+                $data = LpjUnitentry::where('proposal_id',$getid->idproposal)->with('lpj')->first();
+
+                $unitJumlahActData = [
+                    'go' => $request->input('go_act'),
+                    'kpb_1' => $request->input('kpb1_act'),
+                    'kpb_2' => $request->input('kpb2_act'),
+                    'kpb_3' => $request->input('kpb3_act'),
+                    'kpb_4' => $request->input('kpb4_act'),
+                    'lr' => $request->input('lr_act'),
+                    'psl' => $request->input('psl_act'),
+                    'psr' => $request->input('psr_act'),
+                ];
+        
+                foreach ($unitJumlahActData as $unitNama => $unitJumlahAct) {
+                    LpjUnitentry::where('proposal_id', $data->proposal_id)
+                        ->where('unit_nama', $unitNama)
+                        ->update(['unit_jumlahact' => $unitJumlahAct]);
+                }
+            }
+
+            
+    
+            return response()->json(["status" => "success", "message" => "Data Berhasil Disimpan"])->setEncodingOptions(JSON_NUMERIC_CHECK);
+    
+        } catch (\Throwable $th) {
+            // Catch any exceptions or errors and return an error response
+            return response()->json(["status" => "error", "message" => $th->getMessage()]);
         }
     }
 

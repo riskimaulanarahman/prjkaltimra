@@ -257,7 +257,7 @@
                             <div class="mb-2 row fixed-bottom position-sticky p-4 border-top" style="background-color: #fff; ">
                                 <form action="" class="col-12">
                                     <input type="hidden" name="id" value="{{ request()->id }}">
-                                    <a href="{{ route('cabang.lpj.getCreateThree') }}?id={{ request()->id }}" class="btn btn-outline-secondary">Cancel</a>
+                                    <a href="{{ route('cabang.lpj.getCreateThree') }}?id={{ request()->id }}" class="btn btn-outline-secondary">Kembali</a>
                                     <div class="float-right">
                                         <button class="btn btn-outline-info" type="text" name="submit" value="draft">Simpan Sebagai Draft</button>
                                         <button class="btn btn-primary" type="text" name="submit" value="submit"  onclick="return confirm('Konfirmasi')">Next</button>

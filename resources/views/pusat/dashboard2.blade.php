@@ -122,10 +122,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div id="chart4"></div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-6">
                         <div class="row">
                             <div class="col-12">
                                 <label class="font-weight-bold">Leaderboard Penjualan Dealer</label>
@@ -159,7 +159,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-6">
                         <div class="row">
                             <div class="col-12">
                                 <label class="font-weight-bold">Leaderboard Sales People</label>
@@ -169,6 +169,9 @@
                                     <div class="col-1 p-0 pl-2">No.</div>
                                     <div class="col font-weight-bold justify-content-start">
                                         Nama
+                                    </div>
+                                    <div class="col font-weight-bold justify-content-start">
+                                        Dealer
                                     </div>
                                     <div class="col font-weight-bold text-right">
                                         Jumlah SSU
@@ -195,6 +198,7 @@
                                         <div class="col font-weight-bold justify-content-start" style="color: #ec1b25;">
                                             {{ $leaderboard_sales->sales->nama_sales_people }} ({{ $singkatandealer }})
                                         </div>
+                                        <div class="col font-weight-bold justify-content-start">{{$namaDealer}}</div>
                                         <div class="col-3 font-weight-bold text-right">{{ $leaderboard_sales->total_ssu }}</div>
                                     </div>
                                     <hr class="m-0 p-0">
@@ -202,8 +206,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-6">
                         <div id="chart17"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Summary Cost/Unit</h4>
+                        <div id="costunit"></div>
                     </div>
                 </div>
             </div>
@@ -221,7 +236,15 @@
                                 <div id="chart8"></div>
                             </div>
                             <div class="col-sm-4">
-                                <div id="chart9"></div>
+                                <h4>Penjualan</h4>
+                                @php
+                                    $konsumen_hasil = data_get($statistik, 'konsumen_hasil');
+                                    $angka_50 = $konsumen_hasil[0];
+                                @endphp
+                                {{-- <div id="chart9"></div> --}}
+                                <div style="margin-top: 20%; margin-left:10%">
+                                    <h1>{{$angka_50}}</h1>
+                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <div id="chart10"></div>
@@ -249,6 +272,60 @@
                 </div>
             </div>
         </div>
+
+        <script>
+// $(document).ready(function(){
+
+    $.getJSON('/main/getcostunit',function(items){
+        console.log(items)
+        items.sort((a, b) => a.costunit - b.costunit);
+        const pivotGrid = $('#costunit').dxPivotGrid({
+            allowSortingBySummary: true,
+            allowSorting: true,
+            allowFiltering: true,
+            allowExpandAll: true,
+			showColumnGrandTotals: false,
+            height: 440,
+            showBorders: true,
+            fieldChooser: {
+                enabled: true,
+                height: 600,
+                allowSearch: true,
+            },
+            dataSource: {
+            fields: [{
+                width: 120,
+                dataField: 'nama_dealer',
+                area: 'row',
+            }, 
+            {
+                dataField: 'nama_kategori',
+                width: 150,
+                area: 'row',
+                // selector(data) {
+                // return `${data.nama_kategori} (${data.nama_dealer})`;
+                // },
+            }, 
+            {
+                dataField: 'nama_bulan',
+                area: 'column',
+            }, 
+            {
+                caption: 'Jumlah',
+                dataField: 'costunit',
+                dataType: 'number',
+                summaryType: 'sum',
+                format: 'fixedPoint',
+                area: 'data',
+            }],
+            store: items,
+            },
+        });
+        pivotGrid.getDataSource().sortByColumn('costunit', 'asc');
+    })
+// })
+
+        </script>
 
         {{-- 4 CHART BARIS 2 BAGIAN KIRI --}}
         <script>

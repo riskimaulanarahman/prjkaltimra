@@ -2,7 +2,71 @@
 
 @section('title', 'Sales People')
 
+
+
 @section('content')
+
+<style>
+/* CSS for the switch toggle button */
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    }
+
+    .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+
+    .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+    }
+
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    }
+
+    input:checked + .slider {
+    background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+    transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+    border-radius: 34px;
+    }
+
+    .slider.round:before {
+    border-radius: 50%;
+    }
+
+</style>
 <div class="modal fade" id="tambahdata" tabindex="-1" role="dialog" aria-labelledby="tambahdatasales" aria-hidden="true">
     <form action="">
         <div class="modal-dialog" role="document">
@@ -169,6 +233,7 @@
                                     </div>
                                     <div class="text-right">
                                         <div class="btn-group" role="group" aria-label="Action">
+                                            
                                             <a data-toggle="collapse" href="#detail{{ $data->id }}" aria-expanded="false" class="btn btn-sm btn-warning">
                                                 <i class="cil-pencil"></i>
                                             </a>
@@ -181,6 +246,14 @@
                                             </form>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-3">
+                                    ======================<br>
+                                    <label class="switch-label">isActive :</label>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="{{ $data->id }}" class="toggle-user" {{ $data->isActive ? 'checked' : '' }}>
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="row" style="color: #4e4e4e">
@@ -259,6 +332,36 @@
         </div>
     </div><!--col-md-10-->
 </div><!--row-->
+<script>
+$(document).ready(function () {
+    $('.toggle-user').on('change', function () {
+        const userId = $(this).data('id');
+        const isActive = $(this).prop('checked');
+
+        var formData = {
+            id: userId,
+            isActive: isActive ? 1 : 0,
+            _token: $('input[name="_token"]').val()
+        };
+
+        $.ajax({
+            url: '/admin/updsalesactive',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if(response.status == "success") {
+                    alert(response.message)
+                }
+            },
+            error: function(xhr, status, error) {
+                if(response.status == "error") {
+                    alert(response.message)
+                }
+            }
+        });
+    });
+});
+</script>
 <script type="text/javascript">
     $(document).ready(function(){
           $("#dealer").val("{!! request()->dealer !!}");

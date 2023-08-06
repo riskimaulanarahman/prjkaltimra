@@ -273,6 +273,9 @@
             </div>
         </div>
 
+
+        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
+
         <script>
 // $(document).ready(function(){
 

@@ -389,9 +389,9 @@ class LpjController extends Controller
     public function getcostunit() {
         $currentMonth = date('n');
         $currentYear = date('Y');
-        $monthsAgo1 = $currentMonth - 4;
+        $monthsAgo1 = $currentMonth - 1;
         $interval1 = 4;
-        $monthsAgo2 = $currentMonth - 5;
+        $monthsAgo2 = $currentMonth - 2;
         $interval2 = 5;
 
         $result = DB::select("

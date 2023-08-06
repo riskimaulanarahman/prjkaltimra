@@ -94,14 +94,14 @@
                                     <div  style="padding-top: 5px; padding-bottom: 5px">
                                         <label class="form-check-label">Start Date</label>
                                     </div>
-                                    <input type="date" class="form-control" name="startdate" value="2023-05-01" required>
-                                    {{-- <input type="date" class="form-control" name="startdate" value="{{ request()->input('startdate') ?? '' }}" required> --}}
+                                    {{-- <input type="date" class="form-control" name="startdate" value="2023-05-01" required> --}}
+                                    <input type="date" class="form-control" name="startdate" value="{{ request()->input('startdate') ?? '' }}" required>
                                 </div>
                                 <div class="pb-2 col-sm">
                                     <div  style="padding-top: 5px; padding-bottom: 5px">
                                         <label class="form-check-label">End Date</label>
-                                        <input type="date" class="form-control" name="enddate" value="2023-05-31" required>
-                                        {{-- <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required> --}}
+                                        {{-- <input type="date" class="form-control" name="enddate" value="2023-05-31" required> --}}
+                                        <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required>
                                     </div>
                                 </div>
                             </div>

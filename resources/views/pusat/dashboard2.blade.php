@@ -324,7 +324,6 @@
             store: items,
             },
         });
-        pivotGrid.getDataSource().sortByColumn('costunit', 'asc');
     })
 // })
 

@@ -568,7 +568,7 @@
                                                         <td>{{ $data->proposal->usercabang->name }}</td>
                                                         <td></td>
                                                         <td>
-                                                            <label class="badge bg-info" style="color: #fff">Submit Proposal <i class="fas fa-check"></i> </label>
+                                                            <label class="badge bg-info" style="color: #fff">Submit LPJ <i class="fas fa-check"></i> </label>
                                                         </td>
                                                         <td></td>
                                                     </tr>

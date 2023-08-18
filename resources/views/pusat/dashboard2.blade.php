@@ -198,7 +198,7 @@
                                             }
                                         @endphp
                                         <div class="col font-weight-bold justify-content-start" style="color: #ec1b25;">
-                                            {{ $leaderboard_sales->sales->nama_sales_people }} ({{ $singkatandealer }})
+                                            {{ $leaderboard_sales->sales->nama_sales_people }}
                                         </div>
                                         <div class="col font-weight-bold justify-content-start">{{$namaDealer}}</div>
                                         <div class="col-3 font-weight-bold text-right">{{ $leaderboard_sales->total_ssu }}</div>

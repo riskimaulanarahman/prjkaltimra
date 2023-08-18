@@ -76,6 +76,7 @@
                         <div class="col p-0">Start Date</div>
                         <div class="col p-0">End Date</div>
                         <div class="col p-0">Proposal</div>
+                        <div class="col p-0">Lokasi</div>
                         <div class="col p-0">Penanggung Jawab</div>
                         <div class="col p-0">Lokasi</div>
                         <div class="col p-0">Database</div>
@@ -143,6 +144,11 @@
                                 <div class="col p-0">
                                     <div class="font-weight-bold" style="color: #ec1b25">
                                         {{ $data->proposal->kategori->nama_kategori ?? '-' }}
+                                    </div>
+                                </div>
+                                <div class="col p-0">
+                                    <div class="text-muted" style="font-size: 10px">
+                                        {{ $data->tempat_lpj }}
                                     </div>
                                 </div>
                                 <div class="col p-0">

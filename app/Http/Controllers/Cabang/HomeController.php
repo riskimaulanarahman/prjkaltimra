@@ -315,26 +315,32 @@ class HomeController extends Controller
         $getdealer = Dealer::find($user->dealer);
         // dd($getdealer->kota_dealer);
 
-        // $datadealer           = Dealer::where('id',$getdealer->id)->get();
-        $datadealer           = Dealer::cariKota(request()->lokasi)->get();
+        $datadealer           = Dealer::where('id',$getdealer->id)->get();
+        // $datadealer           = Dealer::cariKota(request()->lokasi)->get();
+        // return $datadealer;
         $datadisplay          = Display::get();
         $datalokasikota       = Lokasi::select('kota_lokasi')->where('kota_lokasi',$getdealer->kota_dealer)->groupBy('kota_lokasi')->get();
         $dataactivitykota     = Lokasi::select('kota_lokasi')->groupBy('kota_lokasi')->where('kota_lokasi', request()->lokasi)->get();
         $datakategori         = KategoriProposal::orderBy('keterangan_kategori')->get();
         $dataproposal         = Proposal::finalProposal();
         $leaderboardsales     = LpjKonsumen::select('id_sales_people', DB::raw('count(id_sales_people) as total_ssu'))
+                                        ->leftJoin('lpjs','lpj_konsumens.id_lpj','lpjs.id')
+                                        ->leftJoin('proposals','lpjs.id_proposal','proposals.id')
                                         ->where('hasil', 4)
                                         ->groupBy('id_sales_people')
                                         ->orderBy('total_ssu', 'desc')
                                         ->areaKota(request()->lokasi)
                                         ->dataDealer(request()->dealer)
-                                        ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                        // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                        ->whereBetween('proposals.periode_start_proposal', [request()->get('startdate'), request()->get('enddate')])
+                                        ->whereBetween('proposals.periode_end_proposal', [request()->get('startdate'), request()->get('enddate')])
                                         ->skip(0)
                                         ->take(20)
                                         ->get();
         $datakonsumen          = LpjKonsumen::areaKota(request()->lokasi)->where('hasil', 4)->submitLpj()
                                             ->dataDealer(request()->dealer)
-                                            ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
                                             ->get();
 
         $datafincoy            = FinanceCompany::get();
@@ -350,8 +356,11 @@ class HomeController extends Controller
         // LEADERBOARD LPJ Penjualan
         foreach ($datadealer as $dealer_pen) {
             $penjualan_ = 0;
+            // return $dealer_pen->proposal;
             foreach ($dealer_pen->proposal as $a) {
-                $penjualan_ = $penjualan_ + $a->lpj_lead(request()->get('date-analisys'), request()->get('month-analisys'), request()->get('year-analisys'))->count();
+                $penjualan_ = $penjualan_ + $a->lpj_lead(request()->get('startdate'), request()->get('enddate'))->count();
+
+                // $penjualan_ = $penjualan_ + $a->lpj_lead(request()->get('date-analisys'), request()->get('month-analisys'), request()->get('year-analisys'))->count();
             }
 
             $data[] = array(
@@ -369,22 +378,67 @@ class HomeController extends Controller
 
         // DATA STATISTIK KONSUMEN
         for ($k = 1; $k <= 2; $k++) {
-            $konsumengender_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataGender($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $konsumengender_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataGender($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $konsumengender_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                            ->where('hasil', 4)
+                                            ->submitLpj()
+                                            ->dataDealer(request()->dealer)
+                                            ->dataGender($k)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                            ->count() ;
         }
-        for ($k = 1; $k <= 5; $k++) {
-            $konsumenhasil_[]           = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->dataDealer(request()->dealer)->dataHasil($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+        for ($k = 4; $k <= 5; $k++) {
+            // $konsumenhasil_[]           = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->dataDealer(request()->dealer)->dataHasil($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $konsumenhasil_[]           = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                            ->dataDealer(request()->dealer)
+                                            ->dataHasil($k)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                            ->count() ;
         }
         for ($k = 1; $k <= 11; $k++) {
-            $konsumendp_[]              = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataDp($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $konsumendp_[]              = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataDp($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+             $konsumendp_[]              = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                            ->where('hasil', 4)
+                                            ->submitLpj()
+                                            ->dataDealer(request()->dealer)->dataDp($k)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                            ->count() ;
         }
         for ($k = 1; $k <= 11; $k++) {
-            $konsumenpengeluaran_[]     = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataPengeluaran($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $konsumenpengeluaran_[]     = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataPengeluaran($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $konsumenpengeluaran_[]     = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                            ->where('hasil', 4)
+                                            ->submitLpj()
+                                            ->dataDealer(request()->dealer)
+                                            ->dataPengeluaran($k)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                            ->count() ;
         }
         for ($k = 1; $k <= 24; $k++) {
-            $konsumenpekerjaan_[]       = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataPekerjaan($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $konsumenpekerjaan_[]       = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataPekerjaan($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $konsumenpekerjaan_[]       = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                            ->where('hasil', 4)
+                                            ->submitLpj()
+                                            ->dataDealer(request()->dealer)
+                                            ->dataPekerjaan($k)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                            ->count() ;
         }
         foreach ($datafincoy as $fincoy){
-            $konsumenfincoy_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataFincoy($fincoy->id)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count();
+            // $konsumenfincoy_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataFincoy($fincoy->id)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count();
+            $konsumenfincoy_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                            ->where('hasil', 4)
+                                            ->submitLpj()
+                                            ->dataDealer(request()->dealer)
+                                            ->dataFincoy($fincoy->id)
+                                            // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                            ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                            ->count();
         }
         $a = 0;
         $b = 0;
@@ -412,16 +466,47 @@ class HomeController extends Controller
             }
         }
         for ($k = 1; $k <= 2; $k++) {
-            $cashcredit_[]         = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataCashCredit($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $cashcredit_[]         = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataCashCredit($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $cashcredit_[]         = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                        ->where('hasil', 4)
+                                        ->submitLpj()
+                                        ->dataDealer(request()->dealer)->dataCashCredit($k)
+                                        // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                        ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                        ->count() ;
         }
         for ($k = 1; $k <= 6; $k++) {
-            $merkmotor_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataMerkMotor($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $merkmotor_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataMerkMotor($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $merkmotor_[]          = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                        ->where('hasil', 4)
+                                        ->submitLpj()
+                                        ->dataDealer(request()->dealer)
+                                        ->dataMerkMotor($k)
+                                        // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                        ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                        ->count() ;
         }
         for ($k = 1; $k <= 4; $k++) {
-            $jenismotor_[]         = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataJenisMotor($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $jenismotor_[]         = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataJenisMotor($k)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $jenismotor_[]         = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                        ->where('hasil', 4)
+                                        ->submitLpj()
+                                        ->dataDealer(request()->dealer)
+                                        ->dataJenisMotor($k)
+                                        // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                        ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                        ->count() ;
         }
         foreach ($datadisplay as $motor_){
-            $typeunit_[]           = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataTypeUnit($motor_->id)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            // $typeunit_[]           = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)->where('hasil', 4)->submitLpj()->dataDealer(request()->dealer)->dataTypeUnit($motor_->id)->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)->count() ;
+            $typeunit_[]           = LpjKonsumen::areaKota(request()->lokasi, request()->kecamatan, request()->kelurahan)
+                                        ->where('hasil', 4)
+                                        ->submitLpj()
+                                        ->dataDealer(request()->dealer)
+                                        ->dataTypeUnit($motor_->id)
+                                        // ->tanggal(request()->get('date-analisys') ?? null)->bulan(request()->get('month-analisys') ?? null)->tahun(request()->get('year-analisys') ?? null)
+                                        ->tanggalrange(request()->get('startdate'), request()->get('enddate'))
+                                        ->count() ;
         }
         $statistik = [
             "konsumen_gender"       => $konsumengender_,

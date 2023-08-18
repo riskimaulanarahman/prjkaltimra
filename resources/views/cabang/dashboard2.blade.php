@@ -204,7 +204,7 @@ $i_ = 250;
                                         }
                                     @endphp
                                     <div class="col font-weight-bold justify-content-start" style="color: #ec1b25;">
-                                        {{ $leaderboard_sales->sales->nama_sales_people }} ({{ $singkatandealer }})
+                                        {{ $leaderboard_sales->sales->nama_sales_people }}
                                     </div>
                                     <div class="col-3 font-weight-bold text-right">{{ $leaderboard_sales->total_ssu }}</div>
                                 </div>
@@ -232,7 +232,15 @@ $i_ = 250;
                             <div id="chart8"></div>
                         </div>
                         <div class="col-sm-4">
-                            <div id="chart9"></div>
+                            <h4>Penjualan</h4>
+                            @php
+                                $konsumen_hasil = data_get($statistik, 'konsumen_hasil');
+                                $angka_50 = $konsumen_hasil[0];
+                            @endphp
+                            {{-- <div id="chart9"></div> --}}
+                            <div style="margin-top: 10%; margin-left:10%">
+                                <b style="font-size: 90px">{{$angka_50}}</b>
+                            </div>
                         </div>
                         <div class="col-sm-4">
                             <div id="chart10"></div>

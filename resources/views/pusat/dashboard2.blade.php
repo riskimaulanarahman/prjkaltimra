@@ -244,8 +244,8 @@
                                     $angka_50 = $konsumen_hasil[0];
                                 @endphp
                                 {{-- <div id="chart9"></div> --}}
-                                <div style="margin-top: 20%; margin-left:10%">
-                                    <h1>{{$angka_50}}</h1>
+                                <div style="margin-top: 10%; margin-left:10%">
+                                    <b style="font-size: 90px">{{$angka_50}}</b>
                                 </div>
                             </div>
                             <div class="col-sm-4">

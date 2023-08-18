@@ -105,8 +105,8 @@ $i_ = 250;
                                 <div  style="padding-top: 5px; padding-bottom: 5px">
                                     <label class="form-check-label">Start Date</label>
                                 </div>
-                                <input type="date" class="form-control" name="startdate" value="2023-05-01" required>
-                                {{-- <input type="date" class="form-control" name="startdate" value="{{ request()->input('startdate') ?? '' }}" required> --}}
+                                {{-- <input type="date" class="form-control" name="startdate" value="2023-05-01" required> --}}
+                                <input type="date" class="form-control" name="startdate" value="{{ request()->input('startdate') ?? '' }}" required>
                                 {{-- <select class="form-control data-lokasi" name="analisys" onchange='if(this.value != 0) { this.form.submit(); }'>
                                     <option value="1" {{ request()->analisys == 1 ? 'selected' : '' }}>Daily</option>
                                     <option value="2" {{ request()->analisys == 2 || empty(request()->analisys) ? 'selected' : '' }}>Monthly</option>
@@ -116,8 +116,8 @@ $i_ = 250;
                             <div class="pb-2 col-sm">
                                 <div  style="padding-top: 5px; padding-bottom: 5px">
                                     <label class="form-check-label">End Date</label>
-                                    <input type="date" class="form-control" name="enddate" value="2023-05-31" required>
-                                    {{-- <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required> --}}
+                                    {{-- <input type="date" class="form-control" name="enddate" value="2023-05-31" required> --}}
+                                    <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required>
                                 </div>
                                 {{-- <select class="form-control data-lokasi" name="analisys" onchange='if(this.value != 0) { this.form.submit(); }'>
                                     <option value="1" {{ request()->analisys == 1 ? 'selected' : '' }}>Daily</option>

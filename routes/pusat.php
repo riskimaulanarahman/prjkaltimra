@@ -73,10 +73,7 @@ $maindealerRoutes = function() {
     Route::post('/updatelpjapproval','App\Http\Controllers\Pusat\LpjController@updatelpjapproval');
 
     Route::get('/getcostunit','App\Http\Controllers\Pusat\LpjController@getcostunit');
-<<<<<<< HEAD
     Route::get('/getrevenuechart','App\Http\Controllers\Pusat\LpjController@getrevenuechart');
     Route::get('/getunitentrychart','App\Http\Controllers\Pusat\LpjController@getunitentrychart');
-=======
->>>>>>> 3c3252d (revisi done)
 
 };

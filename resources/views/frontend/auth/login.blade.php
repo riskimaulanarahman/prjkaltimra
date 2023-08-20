@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="card-group" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); border-radius: .45rem; margin-top: 200px">
                 <div class="card p-4">
                     <center>
@@ -45,6 +45,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <button type="submit" style="background-color: #f0072e;border: #f0072e;" class="btn btn-primary px-4" type="button">Login</button>
+                                    <a href="/"><button style="background-color: #155097;border: #155097;" class="btn btn-primary px-4" type="button">Portal</button></a>
                                 </div>
                                 <div class="col-6 text-right">
                                     <a style="color: #f0072e;" href="{{ route('frontend.auth.password.request') }}">Lupa Password</a>

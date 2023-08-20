@@ -104,8 +104,8 @@
                                 <div class="pb-2 col-sm">
                                     <div  style="padding-top: 5px; padding-bottom: 5px">
                                         <label class="form-check-label">End Date</label>
-                                        <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required>
                                     </div>
+                                    <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required>
                                     {{-- <select class="form-control data-lokasi" name="analisys" onchange='if(this.value != 0) { this.form.submit(); }'>
                                         <option value="1" {{ request()->analisys == 1 ? 'selected' : '' }}>Daily</option>
                                         <option value="2" {{ request()->analisys == 2 || empty(request()->analisys) ? 'selected' : '' }}>Monthly</option>

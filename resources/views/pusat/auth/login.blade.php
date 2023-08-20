@@ -46,6 +46,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <button type="submit" style="background-color: #f0072e;border: #f0072e;" class="btn btn-primary px-4" type="button">Login</button>
+                                    <a href="/"><button style="background-color: #cf1418;border: #cf1418;" class="btn btn-primary px-4" type="button">Portal</button></a>
                                 </div>
                                 <div class="col-6 text-right">
                                     <a style="color: #f0072e;" href="{{ route('frontend.auth.password.request') }}">Lupa Password</a>

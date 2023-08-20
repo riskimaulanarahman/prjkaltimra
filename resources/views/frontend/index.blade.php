@@ -97,7 +97,7 @@
 
 /* Warna latar belakang tombol */
 .admin-button {
-    background-color: #3498db; /* Ganti dengan warna yang diinginkan */
+    background-color: #2ecc71; /* Ganti dengan warna yang diinginkan */
 }
 
 .pusat-button {
@@ -105,7 +105,7 @@
 }
 
 .cabang-button {
-    background-color: #2ecc71; /* Ganti dengan warna yang diinginkan */
+    background-color: #3498db; /* Ganti dengan warna yang diinginkan */
 }
     </style>
     @stack('after-styles')

@@ -103,8 +103,8 @@
                                     <div  style="padding-top: 5px; padding-bottom: 5px">
                                         <label class="form-check-label">End Date</label>
                                         {{-- <input type="date" class="form-control" name="enddate" value="2023-05-31" required> --}}
-                                        <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required>
                                     </div>
+                                    <input type="date" class="form-control" name="enddate" value="{{ request()->input('enddate') ?? '' }}" required>
                                 </div>
                             </div>
                             <div class="row pull-right">

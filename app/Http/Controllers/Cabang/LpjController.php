@@ -64,7 +64,7 @@ class LpjController extends Controller
                             ->statusProposal(request()->status)
                             ->tanggal(request()->tanggal)
                             ->where('status_proposal', 4)
-                            ->where('isCancel', 0)
+                            // ->where('isCancel', 0)
                             // ->doesnthave('lpj')
                             ->orderBy('created_at', 'DESC')
                             ->paginate(10);

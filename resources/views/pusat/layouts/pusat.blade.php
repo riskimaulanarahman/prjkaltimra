@@ -21,6 +21,7 @@
     {{-- <livewire:styles /> --}}
     @stack('after-styles')
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script>
 
  
     <!-- DevExtreme library -->
@@ -136,7 +137,6 @@
         }
         });
     </script>
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script>
 
     <script>
         $(window).on('load', function () {

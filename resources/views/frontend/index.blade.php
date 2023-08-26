@@ -6,8 +6,8 @@
     <title>{{ appName() }}</title>
     <meta name="description" content="@yield('meta_description', appName())">
     <meta name="author" content="@yield('meta_author', 'Honda Balikpapan')">
-    <link rel="shortcut icon" href="{{ asset('https://cdn.iconscout.com/icon/free/png-256/free-honda-motor-3441262-2874711.png') }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('https://cdn.iconscout.com/icon/free/png-256/free-honda-motor-3441262-2874711.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('img/logo/honda.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('img/logo/honda.png') }}" type="image/x-icon">
     @yield('meta')
 
     @stack('before-styles')
@@ -101,11 +101,11 @@
 }
 
 .pusat-button {
-    background-color: #e74c3c; /* Ganti dengan warna yang diinginkan */
+    background-color: #3498db; /* Ganti dengan warna yang diinginkan */
 }
 
 .cabang-button {
-    background-color: #3498db; /* Ganti dengan warna yang diinginkan */
+    background-color: #e74c3c; /* Ganti dengan warna yang diinginkan */
 }
     </style>
     @stack('after-styles')
@@ -127,12 +127,12 @@
                 <a href="/main/login"><button class="pusat-button">
                     <img src="{{ asset('img/logo/logo-astra-putih.png') }}" alt="Logo Astra" class="button-icon">
                     <br>
-                    <span class="button-text">Pusat</span>
+                    <span class="button-text">Main Dealer</span>
                 </button></a>
                 <a href="/cabang/login"><button class="cabang-button">
                     <img src="{{ asset('img/logo/logo-astra-putih.png') }}" alt="Logo Astra" class="button-icon">
                     <br>
-                    <span class="button-text">Cabang</span>
+                    <span class="button-text">Dealer</span>
                 </button></a>
             </div><!--center-links -->
         </div><!--content-->

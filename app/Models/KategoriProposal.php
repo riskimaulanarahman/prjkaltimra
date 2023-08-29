@@ -99,7 +99,7 @@ class KategoriProposal extends Model
         return $this->hasMany(Proposal::class, 'kategori_proposal', 'id')
                         ->where('status_proposal', 4)
                         ->where('kategori_proposal', $idkategori)
-                        ->where('periode_start_proposal', '>', Carbon::now()->addDays(1)->format('Y-m-d'))
+                        ->where('periode_start_proposal', '>=', Carbon::now()->addDays(1)->format('Y-m-d'))
                         ->when($this->areakota, function ($query) {
                                 if($this->areakota != 'SEMUA') {
                                     return $query->whereHas('dealer', function ($query) {
@@ -114,8 +114,13 @@ class KategoriProposal extends Model
                                 });
                             }
                         })
+                        // ->where('periode_start_proposal', '<=', $this->enddate)
+                        // ->where('periode_end_proposal', '>=', $this->startdate);
+                        // ->where($this->startdate,'<=','periode_end_proposal')
+                        // ->where($this->enddate,'>=','periode_start_proposal');
                         ->whereBetween('periode_start_proposal', [$this->startdate, $this->enddate])
-                        ->whereBetween('periode_end_proposal', [$this->startdate, $this->enddate]);
+                        ->whereBetween('periode_end_proposal', [$this->startdate, $this->enddate])
+                        ;
     }
 
     public function sedangberjalan($idkategori, $areakota, $iddealer, $startdate = null, $enddate = null)
@@ -145,7 +150,8 @@ class KategoriProposal extends Model
                                 }
                         })
                         ->whereBetween('periode_start_proposal', [$this->startdate, $this->enddate])
-                        ->whereBetween('periode_end_proposal', [$this->startdate, $this->enddate]);
+                        ->whereBetween('periode_end_proposal', [$this->startdate, $this->enddate])
+                        ;
     }
 
     public function selesai($idkategori, $areakota, $iddealer, $startdate = null, $enddate = null)

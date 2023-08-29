@@ -21,7 +21,7 @@
     {{-- <livewire:styles /> --}}
     @stack('after-styles')
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script>
+    {{-- <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script> --}}
 
  
     <!-- DevExtreme library -->
@@ -42,7 +42,6 @@
     
     {{-- <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script> --}}
 
-    {{-- <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script> --}}
 
     <style>
         .c-sidebar {
@@ -121,6 +120,8 @@
     </div><!--c-wrapper-->
 
     @stack('before-scripts')
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
+
     <script src="{{ '/js/manifest.js' }}"></script>
     <script src="{{ '/js/vendor.js' }}"></script>
     <script src="{{ '/js/backend.js' }}"></script>

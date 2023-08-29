@@ -10,6 +10,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+
 <style>
     .graphic-container {
         min-height: 320px;
@@ -293,13 +294,14 @@
 
         <script>
     $.getJSON('/main/getcostunit',function(items){
+
         // console.log(items)
         $('#costunit').dxPivotGrid({
             allowSortingBySummary: true,
             allowSorting: true,
             allowFiltering: true,
             allowExpandAll: true,
-			showColumnGrandTotals: false,
+			showColumnGrandTotals: true,
             height: 440,
             showBorders: true,
             fieldChooser: {
@@ -312,14 +314,13 @@
                 width: 120,
                 dataField: 'nama_dealer',
                 area: 'row',
+                sortBySummaryField: "costunit",
+                sortOrder: 'desc'
             }, 
             {
                 dataField: 'nama_kategori',
                 width: 150,
                 area: 'row',
-                // selector(data) {
-                // return `${data.nama_kategori} (${data.nama_dealer})`;
-                // },
             }, 
             {
                 dataField: 'nama_bulan',
@@ -696,7 +697,7 @@ $.getJSON('/main/getrevenuechart',function(items){
         </script>
 
         {{-- 9 CHART BARIS 3 Hasil--}}
-        <script>
+        {{-- <script>
             var options = {
             chart: {
                 height: {{ $i_ }},
@@ -751,7 +752,7 @@ $.getJSON('/main/getrevenuechart',function(items){
             var chart = new ApexCharts(document.querySelector("#chart9"), options);
 
             chart.render();
-        </script>
+        </script> --}}
 
         {{-- 10 CHART BARIS 3 Range DP--}}
         <script>

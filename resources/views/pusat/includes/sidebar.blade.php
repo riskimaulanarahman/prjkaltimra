@@ -40,7 +40,9 @@
                 <i class="c-sidebar-nav-icon cil-inbox"></i>
                 Inbox
                 @php
-                    $inbox_ = DB::table('proposals')->where('status_proposal', '!=', 1)
+                    $inbox_ = DB::table('proposals')
+                                                ->whereNotIn('status_proposal', [1,5,6])
+                                                ->where('status_proposal', '!=', 1)
                                                 ->where('user_approval', Auth::guard('pusat')->user()->jabatan)
                                                 ->where('inbox_md', true)
                                                 ->count();

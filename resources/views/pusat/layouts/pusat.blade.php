@@ -120,13 +120,14 @@
     </div><!--c-wrapper-->
 
     @stack('before-scripts')
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
 
     <script src="{{ '/js/manifest.js' }}"></script>
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
     <script src="{{ '/js/vendor.js' }}"></script>
     <script src="{{ '/js/backend.js' }}"></script>
     {{-- <livewire:scripts /> --}}
     @stack('after-scripts')
+
     <script>
         window.addEventListener( "pageshow", function ( event ) {
         var historyTraversal = event.persisted ||

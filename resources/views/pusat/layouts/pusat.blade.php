@@ -20,7 +20,6 @@
 
     {{-- <livewire:styles /> --}}
     @stack('after-styles')
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     {{-- <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script> --}}
 
  
@@ -32,12 +31,7 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js" integrity="sha512-5qbIAL4qJ/FSsWfIq5Pd0qbqoZpk5NcUVeAAREV2Li4EKzyJDEGlADHhHOSSCw0tHP7z3Q4hNHJXa81P92borQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     
     {{-- <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.2.5/js/dx.all.js"></script> --}}
@@ -90,6 +84,7 @@
             z-index: 100;
         }
     </style>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 </head>
 <body class="c-app">
@@ -119,14 +114,19 @@
         @include('pusat.includes.footer')
     </div><!--c-wrapper-->
 
-    @stack('before-scripts')
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
-
+    {{-- @stack('before-scripts') --}}
+    
     <script src="{{ '/js/manifest.js' }}"></script>
     <script src="{{ '/js/vendor.js' }}"></script>
     <script src="{{ '/js/backend.js' }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js" integrity="sha512-5qbIAL4qJ/FSsWfIq5Pd0qbqoZpk5NcUVeAAREV2Li4EKzyJDEGlADHhHOSSCw0tHP7z3Q4hNHJXa81P92borQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     {{-- <livewire:scripts /> --}}
-    @stack('after-scripts')
+    {{-- @stack('after-scripts') --}}
     <script>
         window.addEventListener( "pageshow", function ( event ) {
         var historyTraversal = event.persisted ||

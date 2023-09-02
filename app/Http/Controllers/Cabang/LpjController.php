@@ -155,7 +155,7 @@ class LpjController extends Controller
 
     public function getCreateTwo(Request $request) {
 
-        $data           = Lpj::where('uuid', request()->id)->first();
+        $data           = Lpj::where('uuid', request()->id)->with('proposal')->first();
 
         $dataunitentry      = json_decode($data->unit_entry_proposal ?? null, true);
 

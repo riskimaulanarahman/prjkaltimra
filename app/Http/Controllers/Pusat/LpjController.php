@@ -387,8 +387,10 @@ class LpjController extends Controller
     }
 
     public function getcostunit() {
-        $currentMonth = date('n');
-        $currentYear = date('Y');
+        $tanggal = date('Y-m-d',strtotime(request('startdate')));
+        // dd($tanggal);
+        $currentMonth = date('n', strtotime($tanggal));
+        $currentYear = date('Y', strtotime($tanggal));
         $monthsAgo1 = $currentMonth - 1;
         $interval1 = 1;
         $monthsAgo2 = $currentMonth - 2;
@@ -399,7 +401,7 @@ class LpjController extends Controller
             dealers.nama_dealer,
             kategori_proposals.nama_kategori,
             case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo1 else MONTH(lpjs.periode_start_lpj) end AS bulan,
-            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
+            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval1 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
             COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
             COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
             COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
@@ -430,7 +432,7 @@ class LpjController extends Controller
             dealers.nama_dealer,
             kategori_proposals.nama_kategori,
             case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo2 else MONTH(lpjs.periode_start_lpj) end AS bulan,
-            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
+            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval2 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
             COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
             COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
             COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit

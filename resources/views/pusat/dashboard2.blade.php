@@ -294,8 +294,14 @@
         <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
 
 <script>
+
+var currentUrl = window.location.href;
+
+// Mengekstrak parameter startdate dari URL
+var urlParams = new URLSearchParams(currentUrl);
+var startdateparam = urlParams.get('startdate');
 // $(document).ready(function(){
-    $.getJSON('/main/getcostunit',function(items){
+    $.getJSON('/main/getcostunit', { startdate: startdateparam },function(items){
 
         // console.log(items)
         $('#costunit').dxPivotGrid({
@@ -325,7 +331,7 @@
                 area: 'row',
             }, 
             {
-                dataField: 'nama_bulan',
+                dataField: 'bulan',
                 area: 'column',
             }, 
             {

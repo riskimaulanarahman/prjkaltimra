@@ -234,7 +234,10 @@
                                     </div>
                                 </div>
                                 <div class="col p-0 pl-3">
-                                    {{ $data->lokasi->kota_lokasi.', '.$data->lokasi->kecamatan_lokasi.', '.$data->lokasi->kelurahan_lokasi ?? '' }}
+                                    {{-- {{ $data->lokasi->kota_lokasi.', '.$data->lokasi->kecamatan_lokasi.', '.$data->lokasi->kelurahan_lokasi ?? '' }} --}}
+                                    {{
+                                        $data->lokasi ? $data->lokasi->kota_lokasi.', '.$data->lokasi->kecamatan_lokasi.', '.$data->lokasi->kelurahan_lokasi : ''
+                                    }}
                                 </div>
                                 <div class="col p-0 pl-3">
                                     {{ $data->target_database_lpj ?? '' }}

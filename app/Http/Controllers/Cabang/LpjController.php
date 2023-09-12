@@ -56,17 +56,20 @@ class LpjController extends Controller
         $datakategori = KategoriProposal::get();
         $datas        = Proposal::where('dealer_proposal', Auth::guard('cabang')->user()->dealer)
                             ->whereDoesntHave('lpj', function (Builder $query) {
-                                $query->where('status_lpj', 2);
+                                $query->where('status_lpj', 2)
+                                // ->whereNull('submit_date')
+                                ;
                             })
+                            ->leftJoin('lpjs','proposals.id','=','lpjs.id_proposal')
                             ->pj(request()->namapj)
                             ->kategori(request()->kategori)
                             ->lokasi(request()->lokasi)
                             ->statusProposal(request()->status)
                             ->tanggal(request()->tanggal)
-                            ->where('status_proposal', 4)
-                            // ->where('isCancel', 0)
+                            ->where('proposals.status_proposal', 4)
+                            ->whereNull('lpjs.submit_date')
                             // ->doesnthave('lpj')
-                            ->orderBy('created_at', 'DESC')
+                            ->orderBy('proposals.created_at', 'DESC')
                             ->paginate(10);
         // return $datas;
 

@@ -388,6 +388,13 @@ class LpjController extends Controller
             if($cekkonsumen != $data->target_penjualan_lpj){
                 return redirect()->back()->withFlashDanger('Jumlah Konsumen Tidak Sesuai Inputan Data Penjualan. Mohon Sesuaikan !');
             } else {
+                $approver = ApprovalLpj::where('id_lpj',$data->id)->get();
+                foreach($approver as $appr) {
+                    $appr->status_approval = null;
+                    $appr->keterangan_approval = null;
+                    $appr->save();
+                }
+
                 $data->status_lpj  = 4;
                 $data->submit_date = Carbon::now();
                 $data->save();

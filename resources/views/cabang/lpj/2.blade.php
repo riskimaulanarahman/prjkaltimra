@@ -289,7 +289,7 @@
             
         </div><!--row-->
     </div><!--container-->
-    <input type="hidden" id="getkategori" value="{{$data->proposal->kategori_proposal}}">
+    <input type="text" id="getkategori" value="{{$data->proposal->kategori_proposal}}">
 
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -298,7 +298,7 @@ $(document).ready(function() {
 
         $('.savethisdraft, .savethis').on('click',function(){
             var getkategori = $('#getkategori').val();
-            if(getkategori == 3 || getkategori == '3') {
+            if(getkategori == 5 || getkategori == '5') {
                 simpanunitentry();
                 simpanrevenue();
             }

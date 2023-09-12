@@ -2,6 +2,246 @@
 
 @section('title', 'LPJ')
 @section('content')
+
+<!-- Modal -->
+<div class="modal fade" id="export" tabindex="-1" role="dialog" aria-labelledby="exportLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportLabel">Pilihan Data Download LPJ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-month-tab" data-toggle="tab" data-target="#nav-month" type="button" role="tab" aria-controls="nav-month" aria-selected="true">By Month</button>
+                        <button class="nav-link" id="nav-date-tab" data-toggle="tab" data-target="#nav-date" type="button" role="tab" aria-controls="nav-date" aria-selected="false">By Date</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-month" role="tabpanel" aria-labelledby="nav-month-tab">
+                        <form target="_blank" class="row" action="{{ route('pusat.lpj.postExportDataLpj') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="type" value="month">
+                            <div class="col-12">
+                                <div class="row p-2">
+                                    <div class="col-4">Status</div>
+                                    <div class="col-5">
+                                        <select name="status" class="form-control" id="status_e">
+                                            <option value="">Semua</option>
+                                            <option value="1">Draft</option>
+                                            <option value="2">Waiting Approval</option>
+                                            <option value="3">Partial Approval</option>
+                                            <option value="4">Final</option>
+                                            <option value="5">Revise</option>
+                                            <option value="6">Rejected</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Kategori</div>
+                                    <div class="col-5">
+                                        <select class="form-control" name="kategori" id="kategori_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($datakategori as $data_k_e)
+                                            <option value="{{ $data_k_e->id }}">{{ $data_k_e->nama_kategori }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Area</div>
+                                    <div class="col-5">
+                                        <select class="form-control" name="area" id="area_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($dataarea as $data_are_e)
+                                            <option value="{{ $data_are_e->kota_dealer }}"
+                                                @if (request()->area == $data_are_e->kota_dealer)
+                                                selected
+                                                @endif
+                                                >{{ Str::title($data_are_e->kota_dealer) }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                {{-- <div class="row p-2">
+                                    <div class="col-4">Lokasi</div>
+                                    <div class="col-6">
+                                        <select class="form-control" name="lokasi" id="lokasi_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($datalokasi as $data_l_e)
+                                            <option value="{{ $data_l_e->id }}"
+                                                @if (request()->lokasi == $data_l_e->id)
+                                                selected
+                                                @endif
+                                                >{{ $data_l_e->kelurahan_lokasi }}, {{ $data_l_e->kecamatan_lokasi }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div> --}}
+                                <div class="row p-2">
+                                    <div class="col-4">Dealer</div>
+                                    <div class="col-8">
+                                        <select class="form-control" name="dealer" id="dealer_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($datadealer as $data_d_e)
+                                            <option value="{{ $data_d_e->id }}"
+                                                @if (request()->dealer == $data_d_e->id)
+                                                selected
+                                                @endif
+                                                >{{ $data_d_e->nama_dealer }}, {{ Str::title($data_d_e->kota_dealer) }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Bulan</div>
+                                    <div class="col-4">
+                                        <select class="form-control" name="bulan" id="bulan_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @php
+                                            $NamaBulan = array('1'=>'Januari', '2'=>'Februari', '3'=>'Maret', '4'=>'April', '5'=>'Mei', '6'=>'Juni', '7'=>'Juli', '8'=>'Agustus', '9'=>'September', '10'=>'Oktober', '11'=>'November', '12'=>'Desember');
+                                            @endphp
+                                            @for ($j = 1; $j <= 12 ; $j++)
+                                            <option value="{{ $j }}" {{ request()->input('bulan') == $j ? 'selected' : ''}}>{{ $NamaBulan[$j] }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Tahun</div>
+                                    <div class="col-3">
+                                        <select class="form-control" name="tahun" id="tahun_e">
+                                            @for ($i = date("Y"); $i >= 2021 ; $i--)
+                                            <option value="{{ $i }}" {{ request()->input('tahun') == $i ? 'selected' : ($i == date("Y") ? 'selected' : '')  }}>{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="pr-2 pl-2">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="float-right P-2">
+                                        <button type="submit" class="btn btn-primary downloadButton" target="_blank" rel="noopener noreferrer">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="nav-date" role="tabpanel" aria-labelledby="nav-date-tab">
+                        <form target="_blank" class="row" action="{{ route('pusat.lpj.postExportDataLpj') }}?type=date" method="POST">
+                            @csrf
+                            <input type="hidden" name="type" value="date">
+                            <div class="col-12">
+                                <div class="row p-2">
+                                    <div class="col-4">Status</div>
+                                    <div class="col-5">
+                                        <select name="status" class="form-control" id="status_e">
+                                            <option value="">Semua</option>
+                                            <option value="1">Draft</option>
+                                            <option value="2">Waiting Approval</option>
+                                            <option value="3">Partial Approval</option>
+                                            <option value="4">Final</option>
+                                            <option value="5">Revise</option>
+                                            <option value="6">Rejected</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Kategori</div>
+                                    <div class="col-5">
+                                        <select class="form-control" name="kategori" id="kategori_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($datakategori as $data_k_e)
+                                            <option value="{{ $data_k_e->id }}">{{ $data_k_e->nama_kategori }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Area</div>
+                                    <div class="col-5">
+                                        <select class="form-control" name="area" id="area_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($dataarea as $data_are_e)
+                                            <option value="{{ $data_are_e->kota_dealer }}"
+                                                @if (request()->area == $data_are_e->kota_dealer)
+                                                selected
+                                                @endif
+                                                >{{ Str::title($data_are_e->kota_dealer) }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                {{-- <div class="row p-2">
+                                    <div class="col-4">Lokasi</div>
+                                    <div class="col-6">
+                                        <select class="form-control" name="lokasi" id="lokasi_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($datalokasi as $data_l_e)
+                                            <option value="{{ $data_l_e->id }}"
+                                                @if (request()->lokasi == $data_l_e->id)
+                                                selected
+                                                @endif
+                                                >{{ $data_l_e->kelurahan_lokasi }}, {{ $data_l_e->kecamatan_lokasi }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div> --}}
+                                <div class="row p-2">
+                                    <div class="col-4">Dealer</div>
+                                    <div class="col-8">
+                                        <select class="form-control" name="dealer" id="dealer_e">
+                                            <option value="SEMUA">Semua</option>
+                                            @foreach ($datadealer as $data_d_e)
+                                            <option value="{{ $data_d_e->id }}"
+                                                @if (request()->dealer == $data_d_e->id)
+                                                selected
+                                                @endif
+                                                >{{ $data_d_e->nama_dealer }}, {{ Str::title($data_d_e->kota_dealer) }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Tanggal Mulai</div>
+                                    <div class="col-5">
+                                        <input type="date" class="form-control" name="tanggal_start_e">
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-4">Tanggal Akhir</div>
+                                    <div class="col-5">
+                                        <input type="date" class="form-control" name="tanggal_end_e">
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="pr-2 pl-2">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="float-right P-2">
+                                        <button type="submit" class="btn btn-primary downloadButton" target="_blank" rel="noopener noreferrer">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -146,6 +386,11 @@
                         <div class="col-12 mt-2">
                             <div class="row">
                                 <div class="col-md-8">
+                                    <div class="align-middle">
+                                        <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#export">
+                                            <i class="fas fa-file-excel"></i> Download Data
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="col-md-4 text-right" style="padding-bottom:20px;">
                                     <div class="align-middle">
@@ -344,6 +589,16 @@
             $('input[name="tanggal_submit_start"]').val(picker.startDate.format('YYYY-MM-DD'));
             $('input[name="tanggal_submit_end"]').val(picker.endDate.format('YYYY-MM-DD'));
         });
+    });
+
+    $('.downloadButton').click(function() {
+        // Mendapatkan parameter URL saat ini
+        setTimeout(function() {
+            const currentUrl = window.location.href;
+
+            // Memuat ulang halaman dengan parameter yang sama
+            window.location.href = currentUrl;
+        }, 2000);
     });
 </script>
 

@@ -15,6 +15,7 @@ use App\Models\Proposal;
 use App\Models\LpjRevenue;
 use App\Models\LpjUnitentry;
 use App\Models\ApprovalLpj;
+use App\Exports\LpjMainDealer;
 use Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -518,75 +519,103 @@ class LpjController extends Controller
 
         $result = DB::select("
         SELECT
-    nama_bulan,
-    sum(CASE WHEN unit_nama = 'kpb_1' THEN jumlah END) AS kpb_1,
-    sum(CASE WHEN unit_nama = 'kpb_2' THEN jumlah END) AS kpb_2,
-    sum(CASE WHEN unit_nama = 'kpb_3' THEN jumlah END) AS kpb_3,
-    sum(CASE WHEN unit_nama = 'kpb_4' THEN jumlah END) AS kpb_4,
-    sum(CASE WHEN unit_nama = 'psl' THEN jumlah END) AS psl,
-    sum(CASE WHEN unit_nama = 'psr' THEN jumlah END) AS psr,
-    sum(CASE WHEN unit_nama = 'go' THEN jumlah END) AS `go`,
-    sum(CASE WHEN unit_nama = 'lr' THEN jumlah END) AS lr
-FROM (
-    SELECT
-        CASE 
-            WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') 
-            ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
-        END AS nama_bulan,
-        unit_nama,
-        COALESCE(SUM(unit_jumlah),0) AS jumlah
-    FROM
-        lpjs
-        LEFT JOIN lpj_unitentrys ON lpjs.id_proposal = lpj_unitentrys.proposal_id
-    WHERE
-        lpjs.status_lpj = 2
-        AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
-        AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
-        AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
-        AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
-    GROUP BY
-        nama_bulan, unit_nama
-				
-) AS transposed_data
+            nama_bulan,
+            sum(CASE WHEN unit_nama = 'kpb_1' THEN jumlah END) AS kpb_1,
+            sum(CASE WHEN unit_nama = 'kpb_2' THEN jumlah END) AS kpb_2,
+            sum(CASE WHEN unit_nama = 'kpb_3' THEN jumlah END) AS kpb_3,
+            sum(CASE WHEN unit_nama = 'kpb_4' THEN jumlah END) AS kpb_4,
+            sum(CASE WHEN unit_nama = 'psl' THEN jumlah END) AS psl,
+            sum(CASE WHEN unit_nama = 'psr' THEN jumlah END) AS psr,
+            sum(CASE WHEN unit_nama = 'go' THEN jumlah END) AS `go`,
+            sum(CASE WHEN unit_nama = 'lr' THEN jumlah END) AS lr
+        FROM (
+            SELECT
+                CASE 
+                    WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval1 MONTH), '%M') 
+                    ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
+                END AS nama_bulan,
+                unit_nama,
+                COALESCE(SUM(unit_jumlah),0) AS jumlah
+            FROM
+                lpjs
+                LEFT JOIN lpj_unitentrys ON lpjs.id_proposal = lpj_unitentrys.proposal_id
+            WHERE
+                lpjs.status_lpj = 2
+                AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+                AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+                AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
+                AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
+            GROUP BY
+                nama_bulan, unit_nama
+                        
+        ) AS transposed_data
 
-UNION
+        UNION
 
-SELECT
-    nama_bulan,
-    sum(CASE WHEN unit_nama = 'kpb_1' THEN jumlah END) AS kpb_1,
-    sum(CASE WHEN unit_nama = 'kpb_2' THEN jumlah END) AS kpb_2,
-    sum(CASE WHEN unit_nama = 'kpb_3' THEN jumlah END) AS kpb_3,
-    sum(CASE WHEN unit_nama = 'kpb_4' THEN jumlah END) AS kpb_4,
-    sum(CASE WHEN unit_nama = 'psl' THEN jumlah END) AS psl,
-    sum(CASE WHEN unit_nama = 'psr' THEN jumlah END) AS psr,
-    sum(CASE WHEN unit_nama = 'go' THEN jumlah END) AS `go`,
-    sum(CASE WHEN unit_nama = 'lr' THEN jumlah END) AS lr
-FROM (
-    SELECT
-        CASE 
-            WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') 
-            ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
-        END AS nama_bulan,
-        unit_nama,
-        COALESCE(SUM(unit_jumlah),0) AS jumlah
-    FROM
-        lpjs
-        LEFT JOIN lpj_unitentrys ON lpjs.id_proposal = lpj_unitentrys.proposal_id
-    WHERE
-        lpjs.status_lpj = 2
-        AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
-        AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
-        AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
-        AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
-    GROUP BY
-        nama_bulan, unit_nama
-				
-) AS transposed_data;
+        SELECT
+            nama_bulan,
+            sum(CASE WHEN unit_nama = 'kpb_1' THEN jumlah END) AS kpb_1,
+            sum(CASE WHEN unit_nama = 'kpb_2' THEN jumlah END) AS kpb_2,
+            sum(CASE WHEN unit_nama = 'kpb_3' THEN jumlah END) AS kpb_3,
+            sum(CASE WHEN unit_nama = 'kpb_4' THEN jumlah END) AS kpb_4,
+            sum(CASE WHEN unit_nama = 'psl' THEN jumlah END) AS psl,
+            sum(CASE WHEN unit_nama = 'psr' THEN jumlah END) AS psr,
+            sum(CASE WHEN unit_nama = 'go' THEN jumlah END) AS `go`,
+            sum(CASE WHEN unit_nama = 'lr' THEN jumlah END) AS lr
+        FROM (
+            SELECT
+                CASE 
+                    WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB(NOW(), INTERVAL $interval2 MONTH), '%M') 
+                    ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') 
+                END AS nama_bulan,
+                unit_nama,
+                COALESCE(SUM(unit_jumlah),0) AS jumlah
+            FROM
+                lpjs
+                LEFT JOIN lpj_unitentrys ON lpjs.id_proposal = lpj_unitentrys.proposal_id
+            WHERE
+                lpjs.status_lpj = 2
+                AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
+                AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
+                AND YEAR(lpjs.periode_start_lpj) = YEAR(NOW())
+                AND YEAR(lpjs.periode_end_lpj) = YEAR(NOW())
+            GROUP BY
+                nama_bulan, unit_nama
+                        
+        ) AS transposed_data;
 
         
             ");
         // return $result;
         return response()->json($result)->setEncodingOptions(JSON_NUMERIC_CHECK);
+    }
+
+    public function postExportDataLpj()
+    {
+        if(request()->type == 'date'){
+            return (new LpjMainDealer)
+                    ->status(request()->status ?? null)
+                    ->kategori(request()->kategori ?? null)
+                    ->area(request()->area ?? null)
+                    ->dealer(request()->dealer ?? null)
+                    ->tanggalst(request()->tanggal_start_e ?? null)
+                    ->tanggalen(request()->tanggal_end_e ?? null)
+                    ->type(1)
+                    ->download('Data LPJ.xlsx');
+        } elseif(request()->type == 'month') {
+            return (new LpjMainDealer)
+                    ->status(request()->status ?? null)
+                    ->kategori(request()->kategori ?? null)
+                    ->area(request()->area ?? null)
+                    ->dealer(request()->dealer ?? null)
+                    ->bulan(request()->bulan ?? null)
+                    ->tahun(request()->tahun ?? null)
+                    ->type(2)
+                    ->download('Data LPJ.xlsx');
+        }
+
+        return redirect()->route('pusat.lpj.index');
+
     }
 
 }

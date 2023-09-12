@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="float-left">
-                            <h5>Data Proposal</h5>
+                            <h5>Data LPJ</h5>
                         </div>
                         <div class="float-right">
                             <a href="{{ route('cabang.proposal.getPilihJenisProposal') }}" class="btn btn-success">Buat Proposal </a>

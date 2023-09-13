@@ -55,6 +55,7 @@ class LpjController extends Controller
         $datalokasi   = Lokasi::get();
         $datakategori = KategoriProposal::get();
         $datas        = Proposal::where('dealer_proposal', Auth::guard('cabang')->user()->dealer)
+                            ->select('proposals.*')
                             ->whereDoesntHave('lpj', function (Builder $query) {
                                 $query->where('status_lpj', 2)
                                 // ->whereNull('submit_date')

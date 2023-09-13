@@ -111,7 +111,7 @@
 
                 @foreach($datas as $key => $data)
                     
-
+                    {{-- {{ dd($data->uuid) }} --}}
                     <div href="#" style="text-decoration: none;">
                         <div class="card mb-2" style="border-radius: 5px; font-size: 12px">
                             <div class="row p-2 align-items-center">

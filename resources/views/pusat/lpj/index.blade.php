@@ -386,11 +386,11 @@
                         <div class="col-12 mt-2">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div class="align-middle">
+                                    {{-- <div class="align-middle">
                                         <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#export">
                                             <i class="fas fa-file-excel"></i> Download Data
                                         </a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="col-md-4 text-right" style="padding-bottom:20px;">
                                     <div class="align-middle">

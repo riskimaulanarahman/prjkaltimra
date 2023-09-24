@@ -9,7 +9,7 @@
 @endphp
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
+<script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
 
 <style>
     .graphic-container {
@@ -291,7 +291,6 @@
         </div>
 
 
-        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
 
 <script>
 

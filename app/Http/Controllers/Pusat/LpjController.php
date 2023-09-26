@@ -397,66 +397,123 @@ class LpjController extends Controller
         $monthsAgo2 = $currentMonth - 2;
         $interval2 = 2;
 
-        $result = DB::select("
-            SELECT 
+        $result2 = DB::select("
+                SELECT 
+                dealers.nama_dealer,
+                kategori_proposals.nama_kategori,
+                case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo1 else MONTH(lpjs.periode_start_lpj) end AS bulan,
+                case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval1 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
+                COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
+                COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
+                COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
+            FROM
+                kategori_proposals
+            LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
+            LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
+            LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
+                        AND lpjs.status_lpj = 2
+                        AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+                        AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+                        AND YEAR(lpjs.periode_start_lpj) = $currentYear
+                        AND YEAR(lpjs.periode_end_lpj) = $currentYear
+            WHERE 
+                kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
+                dealers.nama_dealer is not null
+                
+            GROUP BY
             dealers.nama_dealer,
-            kategori_proposals.nama_kategori,
-            case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo1 else MONTH(lpjs.periode_start_lpj) end AS bulan,
-            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval1 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
-            COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
-            COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
-            COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
-        FROM
-            kategori_proposals
-        LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
-        LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
-        LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
-                    AND lpjs.status_lpj = 2
-                    AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
-                    AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
-                    AND YEAR(lpjs.periode_start_lpj) = $currentYear
-                    AND YEAR(lpjs.periode_end_lpj) = $currentYear
-        WHERE 
-            kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
-            dealers.nama_dealer is not null
+                kategori_proposals.nama_kategori
+        
+
             
-        GROUP BY
-        dealers.nama_dealer,
-            kategori_proposals.nama_kategori
-    
-
-        
-        UNION
+            UNION
 
 
-        SELECT 
+            SELECT 
+                dealers.nama_dealer,
+                kategori_proposals.nama_kategori,
+                case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo2 else MONTH(lpjs.periode_start_lpj) end AS bulan,
+                case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval2 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
+                COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
+                COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
+                COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
+            FROM
+                kategori_proposals
+            LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
+            LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
+            LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
+                        AND lpjs.status_lpj = 2
+                        AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
+                        AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
+                        AND YEAR(lpjs.periode_start_lpj) = $currentYear
+                        AND YEAR(lpjs.periode_end_lpj) = $currentYear
+            WHERE 
+                kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
+                dealers.nama_dealer is not null
+            GROUP BY
             dealers.nama_dealer,
-            kategori_proposals.nama_kategori,
-            case when MONTH(lpjs.periode_start_lpj) is null then $monthsAgo2 else MONTH(lpjs.periode_start_lpj) end AS bulan,
-            case when DATE_FORMAT(lpjs.periode_start_lpj, '%M') is null then DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval2 MONTH), '%M') else DATE_FORMAT(lpjs.periode_start_lpj, '%M') end AS nama_bulan,
-            COALESCE(sum(total_dana_lpj), 0) AS total_dana_lpj,
-            COALESCE(sum(target_penjualan_lpj), 0) AS target_penjualan_lpj,
-            COALESCE(round(sum(total_dana_lpj) / sum(target_penjualan_lpj)), 0) AS costunit
-        FROM
-            kategori_proposals
-        LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
-        LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
-        LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
-                    AND lpjs.status_lpj = 2
-                    AND MONTH(lpjs.periode_start_lpj) = $monthsAgo2
-                    AND MONTH(lpjs.periode_end_lpj) = $monthsAgo2
-                    AND YEAR(lpjs.periode_start_lpj) = $currentYear
-                    AND YEAR(lpjs.periode_end_lpj) = $currentYear
-        WHERE 
-            kategori_proposals.nama_kategori <> 'Showroom Event Virtual' and
-            dealers.nama_dealer is not null
-        GROUP BY
-        dealers.nama_dealer,
-            kategori_proposals.nama_kategori
+                kategori_proposals.nama_kategori
+            
+        ");
         
-            ");
-        return $result;
+        $datacostunit = DB::select("
+        SELECT 
+    dealers.nama_dealer,
+    kategori_proposals.nama_kategori,
+    CASE WHEN MONTH(lpjs.periode_start_lpj) IS NULL THEN $monthsAgo1 ELSE MONTH(lpjs.periode_start_lpj) END AS bulan,
+    CASE WHEN DATE_FORMAT(lpjs.periode_start_lpj, '%M') IS NULL THEN DATE_FORMAT(DATE_SUB($tanggal, INTERVAL $interval1 MONTH), '%M') ELSE DATE_FORMAT(lpjs.periode_start_lpj, '%M') END AS nama_bulan,
+    COALESCE(SUM(total_dana_lpj), 0) AS total_dana_lpj,
+    COALESCE(SUM(target_penjualan_lpj), 0) AS target_penjualan_lpj,
+    COALESCE(ROUND(SUM(total_dana_lpj) / SUM(target_penjualan_lpj)), 0) AS costunit
+FROM
+    kategori_proposals
+LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
+LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
+LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
+    AND lpjs.status_lpj = 2
+    AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+    AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+    AND YEAR(lpjs.periode_start_lpj) = YEAR(CURRENT_DATE())
+    AND YEAR(lpjs.periode_end_lpj) = YEAR(CURRENT_DATE())
+WHERE 
+    kategori_proposals.nama_kategori <> 'Showroom Event Virtual' AND
+    dealers.nama_dealer IS NOT NULL
+GROUP BY
+    dealers.nama_dealer,
+    kategori_proposals.nama_kategori
+
+UNION ALL
+
+SELECT 
+    dealers.nama_dealer AS nama_dealer,
+    'Total' AS nama_kategori,
+    NULL AS bulan,
+    NULL AS nama_bulan,
+    COALESCE(SUM(total_dana_lpj), 0) AS total_dana_lpj,
+    COALESCE(SUM(target_penjualan_lpj), 0) AS target_penjualan_lpj,
+    COALESCE(ROUND(SUM(total_dana_lpj) / SUM(target_penjualan_lpj)), 0) AS costunit
+FROM
+    kategori_proposals
+LEFT JOIN proposals ON kategori_proposals.id = proposals.kategori_proposal
+LEFT JOIN dealers ON proposals.dealer_proposal = dealers.id
+LEFT JOIN lpjs ON proposals.id = lpjs.id_proposal 
+    AND lpjs.status_lpj = 2
+    AND MONTH(lpjs.periode_start_lpj) = $monthsAgo1
+    AND MONTH(lpjs.periode_end_lpj) = $monthsAgo1
+    AND YEAR(lpjs.periode_start_lpj) = YEAR(CURRENT_DATE())
+    AND YEAR(lpjs.periode_end_lpj) = YEAR(CURRENT_DATE())
+WHERE 
+    kategori_proposals.nama_kategori <> 'Showroom Event Virtual' AND
+    dealers.nama_dealer IS NOT NULL
+GROUP BY
+    dealers.nama_dealer
+
+ORDER BY nama_dealer, nama_kategori");
+        return $datacostunit;
         // return response()->json(["status" => "success", "message" => "Data Ditampilkan", "data" => $result])->setEncodingOptions(JSON_NUMERIC_CHECK);
+        // return view('pusat.dashboard2',
+        //         compact('datacostunit')
+        //     );
     }
 
     public function getrevenuechart() {

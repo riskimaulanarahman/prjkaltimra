@@ -220,8 +220,62 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4>Summary Cost/Unit</h4>
-                        <div id="costunit"></div>
+                        <h4>Summary Cost/Unit </h4><i>(monthly & all dealer)</i>
+                        <div class="row">
+
+                            <div class="col-md-6" style="height: 400px; overflow:scroll;">
+                                <table class="table table-bordered">
+                                    <thead style="position: sticky; top: 0; background-color: white;">
+                                        <tr>
+                                            <th>Nama Dealer</th>
+                                            <th>Nama Kategori</th>
+                                            <th>{{ $bulanHeader }} : Cost/Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablea">
+                                        @php
+                                            $currentDealer = null; // Inisialisasi dealer saat ini
+                                        @endphp
+
+                                        @foreach ($datacostunit as $item)
+                                        <tr class="nama_kategori {{ $item->nama_kategori === 'Total' ? 'total' : '' }}" @if ($item->nama_kategori === 'Total') style="background-color: lightgray;" @endif>
+                                            <td>{{ $item->nama_dealer }} ({{$item->target_penjualan_lpj}})</td>
+                                            <td>{{ $item->nama_kategori }}</td>
+                                            <td>{{ $item->costunit }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6" style="height: 400px; overflow:scroll;">
+                                <table class="table table-bordered">
+                                    <thead style="position: sticky; top: 0; background-color: white;">
+                                        <tr>
+                                            <th>Nama Dealer</th>
+                                            <th>Nama Kategori</th>
+                                            <th>{{ $bulanHeader2 }} : Cost/Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableb">
+                                        @foreach ($datacostunit2 as $item)
+                                        <tr class="nama_kategori2 {{ $item->nama_kategori === 'Total' ? 'total' : '' }}" @if ($item->nama_kategori === 'Total') style="background-color: lightgray;" @endif>
+                                            <td>{{ $item->nama_dealer }} ({{$item->target_penjualan_lpj}})</td>
+                                            <td>{{ $item->nama_kategori }}</td>
+                                            <td>{{ number_format($item->costunit, 0, ',', '.') }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <strong>Grand Total Cost/Unit {{ $bulanHeader }} : {{number_format($totaldana, 0, ',', '.') }} / {{$targetpenjualan}} = {{number_format($totaldana/$targetpenjualan, 0, ',', '.')}}</strong> 
+                            <strong style="float: right;">Grand Total Cost/Unit {{ $bulanHeader2 }} : {{number_format($totaldana2, 0, ',', '.') }} / {{$targetpenjualan2}} = {{number_format($totaldana2/$targetpenjualan2, 0, ',', '.')}}</strong> 
+                        </div>
+
+
+                        {{-- <div id="costunit"></div> --}}
                     </div>
                 </div>
             </div>
@@ -300,51 +354,177 @@ var currentUrl = window.location.href;
 var urlParams = new URLSearchParams(currentUrl);
 var startdateparam = urlParams.get('startdate');
 // $(document).ready(function(){
-    $.getJSON('/main/getcostunit', { startdate: startdateparam },function(items){
 
-        // console.log(items)
-        $('#costunit').dxPivotGrid({
-            allowSortingBySummary: true,
-            allowSorting: true,
-            allowFiltering: true,
-            allowExpandAll: true,
-			showColumnGrandTotals: true,
-            height: 440,
-            showBorders: true,
-            fieldChooser: {
-                enabled: true,
-                height: 600,
-                allowSearch: true,
-            },
-            dataSource: {
-            fields: [{
-                width: 120,
-                dataField: 'nama_dealer',
-                area: 'row',
-                sortBySummaryField: "costunit",
-                sortOrder: 'desc'
-            }, 
-            {
-                dataField: 'nama_kategori',
-                width: 150,
-                area: 'row',
-            }, 
-            {
-                dataField: 'bulan',
-                area: 'column',
-            }, 
-            {
-                caption: 'Jumlah',
-                dataField: 'costunit',
-                dataType: 'number',
-                summaryType: 'sum',
-                format: 'fixedPoint',
-                area: 'data',
-            }],
-            store: items,
-            },
+    setTimeout(() => {
+        $('.nama_kategori:not(.total)').hide();
+        $('.nama_kategori.total').click(function() {
+            console.log('click')
+            $('.nama_kategori:not(.total)').toggle();
         });
-    })
+    }, 300);
+
+    setTimeout(() => {
+        $('.nama_kategori2:not(.total)').hide();
+        $('.nama_kategori2.total').click(function() {
+            $('.nama_kategori2:not(.total)').toggle();
+        });
+    }, 300);
+
+    function sortTable() {
+            var $tbody = $('#tablea');
+            var $rows = $tbody.find('tr');
+
+            // Create an object to store and calculate total "Cost/Unit" for each dealer
+            var dealerTotals = {};
+
+            // Calculate and store the total "Cost/Unit" for each dealer
+            $rows.each(function () {
+                var namaKategori = $(this).find('td:eq(1)').text().trim(); // Get the Nama Kategori
+
+                    var dealerName = $(this).find('td:eq(0)').text().split(' (')[0].trim();
+                    var costUnit = parseFloat($(this).find('td:eq(2)').text().replace(/[^0-9.]/g, ''));
+
+                    if (!dealerTotals[dealerName]) {
+                        dealerTotals[dealerName] = {
+                            totalCost: 0,
+                            rows: []
+                        };
+                    }
+
+                    if (namaKategori == 'Total') {
+                        dealerTotals[dealerName].totalCost += costUnit;
+                    }
+
+                    dealerTotals[dealerName].rows.push(this);
+            });
+
+            console.log(dealerTotals)
+
+            // Sort dealers based on total "Cost/Unit" from lowest to highest
+            var sortedDealers = Object.keys(dealerTotals).sort(function (a, b) {
+                var totalA = dealerTotals[a].totalCost;
+                var totalB = dealerTotals[b].totalCost;
+
+                // If the totals are equal, sort by dealer name
+                if (totalA === totalB) {
+                    return a.localeCompare(b);
+                }
+
+                return totalA - totalB;
+            });
+            // Combine the sorted dealer groups into a single array of rows
+            var sortedRows = [];
+            sortedDealers.forEach(function (dealerName) {
+                var dealer = dealerTotals[dealerName];
+                sortedRows = sortedRows.concat(dealer.rows);
+            });
+
+            // Append sorted rows back to the table
+            $tbody.empty().append(sortedRows);
+    }
+
+    function sortTable2() {
+            var $tbody = $('#tableb');
+            var $rows = $tbody.find('tr');
+
+            // Create an object to store and calculate total "Cost/Unit" for each dealer
+            var dealerTotals = {};
+
+            // Calculate and store the total "Cost/Unit" for each dealer
+            $rows.each(function () {
+                var namaKategori = $(this).find('td:eq(1)').text().trim(); // Get the Nama Kategori
+
+                    var dealerName = $(this).find('td:eq(0)').text().split(' (')[0].trim();
+                    var costUnit = parseFloat($(this).find('td:eq(2)').text().replace(/[^0-9.]/g, ''));
+
+                    if (!dealerTotals[dealerName]) {
+                        dealerTotals[dealerName] = {
+                            totalCost: 0,
+                            rows: []
+                        };
+                    }
+
+                    if (namaKategori == 'Total') {
+                        dealerTotals[dealerName].totalCost += costUnit;
+                    }
+
+                    dealerTotals[dealerName].rows.push(this);
+            });
+
+            console.log(dealerTotals)
+
+            // Sort dealers based on total "Cost/Unit" from lowest to highest
+            var sortedDealers = Object.keys(dealerTotals).sort(function (a, b) {
+                var totalA = dealerTotals[a].totalCost;
+                var totalB = dealerTotals[b].totalCost;
+
+                // If the totals are equal, sort by dealer name
+                if (totalA === totalB) {
+                    return a.localeCompare(b);
+                }
+
+                return totalA - totalB;
+            });
+            // Combine the sorted dealer groups into a single array of rows
+            var sortedRows = [];
+            sortedDealers.forEach(function (dealerName) {
+                var dealer = dealerTotals[dealerName];
+                sortedRows = sortedRows.concat(dealer.rows);
+            });
+
+            // Append sorted rows back to the table
+            $tbody.empty().append(sortedRows);
+    }
+
+        // Initially, sort the table when the page loads
+        sortTable();
+        sortTable2();
+
+    // $.getJSON('/main/getcostunit', { startdate: startdateparam },function(items){
+
+    //     // console.log(items)
+    //     $('#costunit').dxPivotGrid({
+    //         allowSortingBySummary: true,
+    //         allowSorting: true,
+    //         allowFiltering: true,
+    //         allowExpandAll: true,
+	// 		showColumnGrandTotals: true,
+    //         height: 440,
+    //         showBorders: true,
+    //         fieldChooser: {
+    //             enabled: true,
+    //             height: 600,
+    //             allowSearch: true,
+    //         },
+    //         dataSource: {
+    //         fields: [{
+    //             width: 120,
+    //             dataField: 'nama_dealer',
+    //             area: 'row',
+    //             sortBySummaryField: "costunit",
+    //             sortOrder: 'desc'
+    //         }, 
+    //         {
+    //             dataField: 'nama_kategori',
+    //             width: 150,
+    //             area: 'row',
+    //         }, 
+    //         {
+    //             dataField: 'bulan',
+    //             area: 'column',
+    //         }, 
+    //         {
+    //             caption: 'Jumlah',
+    //             dataField: 'costunit',
+    //             dataType: 'number',
+    //             summaryType: 'sum',
+    //             format: 'fixedPoint',
+    //             area: 'data',
+    //         }],
+    //         store: items,
+    //         },
+    //     });
+    // })
 
     $.getJSON('/main/getunitentrychart',function(items){
 

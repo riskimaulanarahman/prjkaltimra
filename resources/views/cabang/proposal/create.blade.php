@@ -50,7 +50,7 @@ rel="stylesheet"
             <div class="col-md-12">
                 <div class="card">
                     @if ($data->status_proposal == 1 || $data->status_proposal == 5)
-                    <form class="card-body" action="{{ route('cabang.proposal.postStore') }}" method="POST">
+                    <form id="formproposal" class="card-body" action="{{ route('cabang.proposal.postStore') }}" method="POST">
                         @csrf
                         <input type="hidden" name="uuid" value="{{ $data->uuid }}">
                     @else
@@ -1149,6 +1149,13 @@ rel="stylesheet"
         
         })
     }
+</script>
+<script>
+    $("#formproposal").submit(function(e) {
+        // e.preventDefault(); // Ini untuk mencegah pengiriman formulir
+        $("#simpanunitentry").trigger("click");
+        $("#simpanrevenue").trigger("click");
+    });
 </script>
     <script type="text/javascript">
         $('.data-lokasi').select2(

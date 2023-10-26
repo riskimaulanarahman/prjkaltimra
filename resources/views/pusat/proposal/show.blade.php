@@ -795,19 +795,20 @@ rel="stylesheet"
             </div><!--col-md-10-->
         </div><!--row-->
     </div><!--container-->
-    <input type="hidden" name="id" value="{{ request()->id }}">
+    <input type="hidden" name="uuid" value="{{ request()->id }}">
 
     <script>
         var kategori = $('#idkategori').val();
         if(kategori == 5) {
             $(document).ready(function() {
             
-                var id = $('input[name="id"]').val();
+                var uuid = $('input[name="uuid"]').val();
+                console.log(uuid)
             
                 $.ajax({
                     url: '/main/getunitentrylpj',
                     type: 'POST',
-                    data: {id: id,model:'proposal',_token: $('input[name="_token"]').val()},
+                    data: {id: uuid,model:'proposal',_token: $('input[name="_token"]').val()},
                     success: function(response) {
                         if(response.status == "success") {
                             var items = response.data
@@ -848,12 +849,12 @@ rel="stylesheet"
                 $('#part').val(0);
                 $('#oli').val(0);
             
-                var id = $('input[name="id"]').val();
+                var uuid = $('input[name="uuid"]').val();
             
                 $.ajax({
                     url: '/main/getrevenuelpj',
                     type: 'POST',
-                    data: {id: id,model:'proposal',_token: $('input[name="_token"]').val()},
+                    data: {id: uuid,model:'proposal',_token: $('input[name="_token"]').val()},
                     success: function(response) {
                         if(response.status == "success") {
                             var items = response.data

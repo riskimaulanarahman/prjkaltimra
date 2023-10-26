@@ -332,7 +332,6 @@ class LpjController extends Controller
             return response()->json(["status" => "success", "message" => "Data Berhasil Disimpan"])->setEncodingOptions(JSON_NUMERIC_CHECK);
     
         } catch (\Throwable $th) {
-            // Catch any exceptions or errors and return an error response
             return response()->json(["status" => "error", "message" => $th->getMessage()]);
         }
     }

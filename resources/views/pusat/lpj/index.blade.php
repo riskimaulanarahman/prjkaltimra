@@ -267,8 +267,11 @@
                                     </div>
                                     <select id="status" name="status" class="form-control">
                                         <option value="">Semua</option>
-                                        <option value="1" {{ request()->status == 1 ? 'selected' : ''}}>Draft</option>
-                                        <option value="2" {{ request()->status == 2 ? 'selected' : ''}}>Submit</option>
+                                        <option value="2" {{ request()->status == 2 ? 'selected' : ''}}>Approved</option>
+                                        <option value="3" {{ request()->status == 3 ? 'selected' : ''}}>Cancel</option>
+                                        <option value="4" {{ request()->status == 4 ? 'selected' : ''}}>Waiting Approval</option>
+                                        <option value="5" {{ request()->status == 5 ? 'selected' : ''}}>Reject</option>
+                                        <option value="6" {{ request()->status == 6 ? 'selected' : ''}}>Revisi</option>
                                     </select>
                                 </div>
                                 <div class="pb-2 col">

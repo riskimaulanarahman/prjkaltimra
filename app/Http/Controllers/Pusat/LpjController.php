@@ -57,6 +57,9 @@ class LpjController extends Controller
                     ->when(request()->tanggal_submit, function ($query) {
                         $query->whereBetween('submit_date', [request()->tanggal_submit_start, request()->tanggal_submit_end]);
                     })
+                    ->when(request()->status, function ($query) {
+                        $query->where('status_lpj', request()->status);
+                    })
                     ->with('approval')
                     ->paginate(10);;
         } else {
@@ -74,6 +77,9 @@ class LpjController extends Controller
                     })
                     ->when(request()->tanggal_submit, function ($query) {
                         $query->whereBetween('submit_date', [request()->tanggal_submit_start, request()->tanggal_submit_end]);
+                    })
+                    ->when(request()->status, function ($query) {
+                        $query->where('status_lpj', request()->status);
                     })
                     ->with('approval')
                     ->paginate(10);

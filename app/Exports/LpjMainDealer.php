@@ -122,7 +122,7 @@ class LpjMainDealer implements FromQuery, WithHeadings, WithMapping, ShouldAutoS
             $data->periode_end_lpj ?? null,
             $data->proposal->kategori->nama_kategori ?? null,
             $data->proposal->dealer->nama_dealer ?? null,
-            $data->lokasi->kota_lokasi ?? null,
+            $data->lokasi->kota_lokasi.','.$data->lokasi->kecamatan_lokasi.','.$data->lokasi->kelurahan_lokasi ?? null,
             // $data->proposal->pj->nama_sales_people ?? null,
             // $data->tempat_proposal ?? null,
             // $data->finance_proposal ?? null,

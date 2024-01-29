@@ -540,7 +540,7 @@
                 <div class="row">
                     <div class="col-7">
                         <div class="float-left">
-                            {{-- {!! $first !!} - {!! $end !!} From {!! $datas->total() !!} Data --}}
+                            {!! $first !!} - {!! $end !!} From {!! $datas->total() !!} Data
                         </div>
                     </div><!--col-->
 

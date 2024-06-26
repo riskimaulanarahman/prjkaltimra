@@ -105,7 +105,7 @@
                                                     {{ $data->proposal->dealer ? $data->proposal->dealer->nama_dealer : '' }}
                                                 </td>
                                                 <td style="vertical-align: middle;">
-                                                    {{ $data->tempat_lpj }}. {{ $data->lokasi->kelurahan_lokasi }}, {{ $data->lokasi->kecamatan_lokasi }}, {{ Str::title($data->lokasi->kota_lokasi) }}
+                                                    {{ $data->tempat_lpj }}. @if(!empty($data->lokasi)) {{ $data->lokasi->kelurahan_lokasi }}, {{ $data->lokasi->kecamatan_lokasi }}, {{ Str::title($data->lokasi->kota_lokasi) }} @endif
                                                 </td>
                                                 <td style="vertical-align: middle;">
                                                     {{ $data->proposal->target_database_proposal }}

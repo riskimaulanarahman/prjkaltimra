@@ -115,22 +115,17 @@ class LpjMainDealer implements FromQuery, WithHeadings, WithMapping, ShouldAutoS
             6 => 'Revisi',
         ];
         return [
-            // $data->no_proposal ?? null,
             $status_lpj_options[$data->status_lpj] ?? null,
-            // $data->statusp->nama_status ?? null,
             $data->periode_start_lpj ?? null,
             $data->periode_end_lpj ?? null,
             $data->proposal->kategori->nama_kategori ?? null,
             $data->proposal->dealer->nama_dealer ?? null,
-            $data->lokasi->kota_lokasi.','.$data->lokasi->kecamatan_lokasi.','.$data->lokasi->kelurahan_lokasi ?? null,
-            // $data->proposal->pj->nama_sales_people ?? null,
-            // $data->tempat_proposal ?? null,
-            // $data->finance_proposal ?? null,
-            // $data->lokasi->kelurahan_lokasi ?? null.', '.$data->lokasi->kecamatan_lokasi ?? null,
-            $data->target_database_lpj ?? null,
+            // ($data->lokasi->kota_lokasi) ? $data->lokasi->kota_lokasi.','.$data->lokasi->kecamatan_lokasi.','.$data->lokasi->kelurahan_lokasi : null,
+            isset($data->lokasi) && is_object($data->lokasi) 
+            ? ($data->lokasi->kota_lokasi ?? '') . ',' . ($data->lokasi->kecamatan_lokasi ?? '') . ',' . ($data->lokasi->kelurahan_lokasi ?? '')
+            : null,$data->target_database_lpj ?? null,
             $data->target_prospectus_lpj ?? null,
             $data->target_penjualan_lpj ?? null,
-            // $data->target_download_proposal ?? null,
             $data->total_dana_lpj ?? null,
             $data->submit_date ?? null,
         ];

@@ -119,7 +119,7 @@
 
             <!-- Memusatkan tombol-tombol -->
             <div class="center-links">
-                <a href="/login"><button class="admin-button">
+                <a href="/admin"><button class="admin-button">
                     <img src="{{ asset('img/logo/logo-astra-putih.png') }}" alt="Logo Astra" class="button-icon">
                     <br>
                     <span class="button-text">Admin</span>

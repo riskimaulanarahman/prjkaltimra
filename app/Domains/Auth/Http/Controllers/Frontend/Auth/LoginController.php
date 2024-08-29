@@ -27,6 +27,8 @@ class LoginController
 
     use AuthenticatesUsers;
 
+    protected $redirectTo = '/admin';
+
     /**
      * Where to redirect users after login.
      *

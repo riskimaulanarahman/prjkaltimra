@@ -27,7 +27,7 @@ Route::group(['as' => 'auth.'], function () {
         Route::patch('password/expired', [PasswordExpiredController::class, 'update'])->name('password.expired.update');
 
         // These routes can not be hit if the password is expired
-        Route::group(['middleware' => 'password.expires'], function () {
+        // Route::group(['middleware' => 'password.expires'], function () {
             // E-mail Verification
             Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
             Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
@@ -77,7 +77,7 @@ Route::group(['as' => 'auth.'], function () {
                     });
                 });
             });
-        });
+        // });
     });
 
     Route::group(['middleware' => 'guest'], function () {

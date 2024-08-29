@@ -8,6 +8,7 @@
     <meta name="description" content="@yield('meta_description', appName())">
     <meta name="author" content="@yield('meta_author', 'Honda Balikpapan')">
 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     {{--  auto refresh, g perlu di git commit / push --}}
     {{-- <meta http-equiv="refresh" content="10"> --}}
 
@@ -84,7 +85,7 @@
             z-index: 100;
         }
     </style>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    {{-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script> --}}
 
 </head>
 <body class="c-app">

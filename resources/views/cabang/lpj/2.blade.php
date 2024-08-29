@@ -87,7 +87,7 @@
                                                         <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">Rp. </span>
                                                         </div>
-                                                        <input class="form-control" name="totaldana" value="{{ $data->total_dana_lpj }}" required>
+                                                        <input type="number" min="100000" class="form-control" name="totaldana" value="{{ $data->total_dana_lpj }}" required>
                                                     </div>
                                                 </td>
                                             </tr>

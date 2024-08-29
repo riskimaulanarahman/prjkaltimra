@@ -210,6 +210,9 @@ class HomeController extends Controller
                 foreach ($dealer_pen->proposal as $a) {
                     $penjualan_ = $penjualan_ + $a->lpj_lead(request()->get('startdate'), request()->get('enddate'))->count();
                 }
+
+                // dd($penjualan_);
+
                 
                 $data[] = array(
                     'dealer_'    => $dealer_pen->nama_dealer,
